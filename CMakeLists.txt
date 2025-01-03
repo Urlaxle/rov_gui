@@ -10,7 +10,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 # Find Qt5 packages
-find_package(Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt5 REQUIRED COMPONENTS Widgets Network)
 
 # Add include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -23,7 +23,7 @@ add_executable(CrazyFlieGUI
 )
 
 # Link against Qt5 libraries
-target_link_libraries(CrazyFlieGUI Qt5::Widgets)
+target_link_libraries(CrazyFlieGUI Qt5::Widgets Qt5::Network)
 
 # Ensure MOC files are generated correctly
 target_include_directories(CrazyFlieGUI PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
