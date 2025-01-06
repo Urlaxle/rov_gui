@@ -6,6 +6,8 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     setFixedSize(1920, 1080);
     // Main Layout
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
+    this->setLayout(mainLayout);
+    left_layout = new QVBoxLayout;
 
 
     // Button layout
@@ -14,17 +16,49 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     log_button = new QPushButton("START LOGGING");
     config_button = new QPushButton("CONFIGURE");
     sniffer_button = new QPushButton("UDP SNIFFER");
+    synch_button = new QPushButton("SYNCHRONIZE");
     help_button = new QPushButton("HELP");
     exit_button = new QPushButton("EXIT");
     config_button->setCheckable(true);
     start_button->setCheckable(true);
+    sniffer_button->setCheckable(true);
     button_layout->addWidget(start_button);
     button_layout->addWidget(log_button);
     button_layout->addWidget(config_button);
     button_layout->addWidget(sniffer_button);
+    button_layout->addWidget(synch_button);
     button_layout->addWidget(help_button);
     button_layout->addWidget(exit_button);
     button_layout->addStretch();
+
+    // Thruster Layout
+    thruster_indicator_layout = new QGridLayout;
+    QProgressBar *bars[7];
+    QLabel *labels[7];
+    QStringList labelsText = {"T1", "T2", "T3", "T4", "T5", "T6", "T7"};
+    
+    for (int i = 0; i < 7; ++i) {
+        // Create progress bar
+        bars[i] = new QProgressBar;
+        bars[i]->setOrientation(Qt::Vertical);
+        bars[i]->setRange(0, 100);
+        bars[i]->setValue(50); // Initial value
+
+        // Create label
+        labels[i] = new QLabel(labelsText[i]);
+        labels[i]->setAlignment(Qt::AlignCenter);
+        labels[i]->setStyleSheet("font-weight: bold;");
+
+        // Add to layout
+        int row = (i < 3) ? 0 : 2; // Top row for first 3 bars, bottom row for next 4 bars
+        int col = (i < 3) ? 1 + (i*2) : (i - 3) * 2;
+        thruster_indicator_layout->addWidget(bars[i], row, col);  // Add bar
+        thruster_indicator_layout->addWidget(labels[i], row+1, col);  // Add label below the bar
+    }
+
+    // Compass Layout
+    compass = new CompassWidget;
+    compass->setFixedSize(500, 500);
 
     // Status indicators
     status_layout = new QVBoxLayout;
@@ -46,14 +80,20 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     status_layout->addWidget(status_light_widget,1); 
 
     // Add layouts to main layout
-    mainLayout->addLayout(button_layout, 1);  // Left: Buttons
+    left_layout->addLayout(button_layout);  // Left: Buttons
+    left_layout->addWidget(compass, 16);  // Left: Compass
+    left_layout->addLayout(thruster_indicator_layout, 2); // Right: Thruster Indicators
+    mainLayout->addLayout(left_layout, 1);  // Left: Buttons
     mainLayout->addLayout(status_layout, 3); // Right: Status + Terminal
 
     // Connect signals and slots
     connect(start_button, &QPushButton::clicked, this, &GUI::on_start_button);
     connect(config_button, &QPushButton::clicked, this, &GUI::on_config_button);
     connect(exit_button, &QPushButton::clicked, this, &GUI::on_exit_button);
+    connect(sniffer_button, &QPushButton::clicked, this, &GUI::on_sniffer_button);
 
+    // Show widgets
+    this->show();
 }
 
 GUI::~GUI() {
@@ -65,6 +105,8 @@ void GUI::on_start_button() {
         start_button->setText("START");
         start_button->setStyleSheet("");
         start_button->setDown(false);
+        config_button->setEnabled(true);
+        sniffer_button->setEnabled(true);
         write_to_terminal(QString("Control System stopped"));
     } 
     // Sends message to control PC that the system should stop 
@@ -72,6 +114,9 @@ void GUI::on_start_button() {
         start_button->setStyleSheet("background-color: green; color: white;");
         start_button->setText("RUNNING");
         start_button->setDown(true);
+        config_button->setDisabled(true);
+        sniffer_button->setDisabled(true);
+
         write_to_terminal(QString("Control System started"));
     }
 }
@@ -84,6 +129,14 @@ void GUI::on_config_button() {
     connect(config_dialog, &ConfigDialog::configUpdated, this, &GUI::update_config);
     config_dialog->exec();
     config_button->setChecked(false);
+}
+
+// UDP Sniffer button pressed
+void GUI::on_sniffer_button() {
+    // Open sniffer dialog
+    udp_sniffer *sniffer = new udp_sniffer(this);
+    sniffer->exec();
+    sniffer_button->setChecked(false);
 }
 
 // Exit button pressed
@@ -117,6 +170,7 @@ void GUI::write_to_terminal(const QString &msg) {
 }
 
 
+
 void GUI::setup_status_lights() {
     // Main layout for the two 2x2 grids
     QHBoxLayout *mainGridLayout = new QHBoxLayout(status_light_widget);
@@ -126,8 +180,10 @@ void GUI::setup_status_lights() {
     QWidget *gridWidget2 = new QWidget(status_light_widget);
 
     // Setup each 2x2 grid with vertical lights
-    setupSingleLightGrid(gridWidget1, "Control Modes");
-    setupSingleLightGrid(gridWidget2, "Sensors");
+    setupSingleLightGrid(gridWidget1, "Control Modes", "Waypoint Control", "Dynamic Positioning", "Altitude Hold", "Depth Hold",
+                         "On", "Available", "Unavailable", "blue", "green", "red");
+    setupSingleLightGrid(gridWidget2, "Sensor Status", "DVL", "IMU", "Depth Sensor", "USBL",
+                         "Available", "Degraded", "Unavailable", "green", "yellow", "red");
 
     // Add the two grids to the main layout
     mainGridLayout->addWidget(gridWidget1);
@@ -136,7 +192,9 @@ void GUI::setup_status_lights() {
     status_light_widget->setLayout(mainGridLayout);
 }
 
-void GUI::setupSingleLightGrid(QWidget *parent, const QString &groupName) {
+void GUI::setupSingleLightGrid(QWidget *parent, const QString &groupName, const QString& status1, const QString& status2, const QString& status3, const QString& status4,
+                               const QString& indicator1, const QString& indicator2, const QString& indicator3, 
+                               const QString& light_color1, const QString& light_color2, const QString& light_color3) {
     // Outer layout for this grid
     QVBoxLayout *outerLayout = new QVBoxLayout(parent);
 
@@ -148,7 +206,7 @@ void GUI::setupSingleLightGrid(QWidget *parent, const QString &groupName) {
 
     // Grid layout for the 2x2 status lights
     QGridLayout *gridLayout = new QGridLayout;
-    QStringList statuses = {"Waypoint Control", "Dynamic Positioning", "Altitude Hold", "Depth Hold"};
+    QStringList statuses = {status1, status2, status3, status4};
 
     for (int i = 0; i < 4; ++i) {
         QLabel *label = new QLabel(statuses[i], parent);
@@ -168,8 +226,8 @@ void GUI::setupSingleLightGrid(QWidget *parent, const QString &groupName) {
     // Vertical layout for color indicators
     QVBoxLayout *colorIndicatorLayout = new QVBoxLayout;
 
-    QStringList colorDescriptions = {"Indicator 1", "Indicator 2", "Indicator 3"};
-    QStringList colors = {"green", "yellow", "red"};
+    QStringList colorDescriptions = {indicator1, indicator2, indicator3};
+    QStringList colors = {light_color1, light_color2, light_color3};
 
     for (int i = 0; i < 3; ++i) {
         QHBoxLayout *indicatorLayout = new QHBoxLayout;

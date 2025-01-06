@@ -14,12 +14,15 @@ find_package(Qt5 REQUIRED COMPONENTS Widgets Network)
 
 # Add include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/images)
 
 # Add the executable
 add_executable(CrazyFlieGUI
     src/gui_test.cpp
     src/gui.cpp
+    src/udp_sniffer_gui.cpp
     include/gui.hpp
+    include/udp_sniffer_gui.hpp
 )
 
 # Link against Qt5 libraries

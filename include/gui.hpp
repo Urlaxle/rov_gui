@@ -1,6 +1,11 @@
 #ifndef CRAZYFLIE_GUI_H_
 #define CRAZYFLIE_GUI_H_
 
+// 
+#include <compass_gui.hpp>
+#include <udp_sniffer_gui.hpp>
+
+// QT 
 #include <QMainWindow>
 #include <QApplication>
 #include <QWidget>
@@ -14,8 +19,17 @@
 #include <QIntValidator>
 #include <QHostAddress>
 #include <QTextEdit>
+#include <QGridLayout>
+#include <QProgressBar>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
+#include <QTransform>
+#include <QTimer>
+#include <QPainter>
 
 #include <iostream>
+
 
 // MAIN GUI
 class GUI : public QWidget{
@@ -30,10 +44,13 @@ private:
     void on_start_button();
     void on_config_button();
     void on_exit_button();
+    void on_sniffer_button();
     void update_config(const QString &ip, int port1, int port2, int port3);
     void setup_status_lights();
     void write_to_terminal(const QString &msg);
-    void setupSingleLightGrid(QWidget *parent, const QString &groupName);
+    void setupSingleLightGrid(QWidget *parent, const QString &groupName, const QString& status1, const QString& status2, const QString& status3, const QString& status4
+                              , const QString& indicator1, const QString& indicator2, const QString& indicator3, 
+                              const QString& light_color1, const QString& light_color2, const QString& light_color3);
 
 
 private:
@@ -56,8 +73,16 @@ private:
     QPushButton *config_button;
     QPushButton *exit_button;
     QPushButton *help_button;
+    QPushButton *synch_button;
     QTextEdit *terminal;
     QWidget *status_light_widget;
+    QGridLayout* thruster_indicator_layout;
+    QVBoxLayout* left_layout;
+    CompassWidget* compass;
+    //QGraphicsScene *compass_scene;
+    //QGraphicsView *compass_view;
+
+
 };
 
 
@@ -81,6 +106,8 @@ private:
     QLineEdit *port3;
     QLabel *error_label;
 };
+
+
 
 
 #endif
