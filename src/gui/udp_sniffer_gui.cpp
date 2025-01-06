@@ -1,4 +1,4 @@
-#include "udp_sniffer_gui.hpp"
+#include "gui/udp_sniffer_gui.hpp"
 #include <QHostAddress>
 
 // Constructor for UDP Sniffer
