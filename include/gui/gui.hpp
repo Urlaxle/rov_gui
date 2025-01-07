@@ -7,6 +7,7 @@
 #include <gui/buttons_gui.hpp>
 #include <gui/compass_gui.hpp>
 #include <gui/thrusters_gui.hpp>
+#include <gui/indicator_gui.hpp>    
 
 // QT 
 #include <QMainWindow>
@@ -43,15 +44,11 @@ public:
     ~GUI();
 
 private:
-    // Buttons presses
     void update_config(const QString &ip, int port1, int port2, int port3);
-    void setup_status_lights();
     void write_to_terminal(const QString &msg);
-    void setupSingleLightGrid(QWidget *parent, const QString &groupName, const QString& status1, const QString& status2, const QString& status3, const QString& status4
-                              , const QString& indicator1, const QString& indicator2, const QString& indicator3, 
-                              const QString& light_color1, const QString& light_color2, const QString& light_color3);
 
 private slots:
+    // Buttons presses
     void on_start_button();
     void on_config_button();
     void on_sniffer_button();
@@ -72,10 +69,7 @@ private:
     compass* compass_widget_;
     thrusters* thrusters_widget_;
     QTextEdit* terminal_;
-
-    // GUI elements
-    QWidget *status_light_widget;
-
+    indicators* status_light_widget;
 };
 
 #endif

@@ -24,12 +24,14 @@ add_executable(CrazyFlieGUI
     src/gui/buttons_gui.cpp
     src/gui/compass_gui.cpp
     src/gui/thrusters_gui.cpp
+    src/gui/indicator_gui.cpp
     include/gui/gui.hpp
     include/gui/udp_sniffer_gui.hpp
     include/gui/configuration_gui.hpp
     include/gui/buttons_gui.hpp
     include/gui/compass_gui.hpp
     include/gui/thrusters_gui.hpp
+    include/gui/indicator_gui.hpp
     resources.qrc
 )
 

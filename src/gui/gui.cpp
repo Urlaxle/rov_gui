@@ -38,8 +38,7 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     write_to_terminal(QString("Welcome to the MINERVA II Control System"));
 
     // Indicator light widget
-    status_light_widget = new QWidget(this);
-    setup_status_lights();
+    status_light_widget = new indicators(this);
 
     // Add widgets to layouts
     left_layout_->addWidget(buttons_widget_);  // Left: Buttons
@@ -139,84 +138,4 @@ void GUI::update_config(const QString &ip, int port1, int port2, int port3) {
 void GUI::write_to_terminal(const QString &msg) {
     terminal_->append(msg);
     terminal_->moveCursor(QTextCursor::End);
-}
-
-
-
-void GUI::setup_status_lights() {
-    // Main layout for the two 2x2 grids
-    QHBoxLayout *mainGridLayout = new QHBoxLayout(status_light_widget);
-
-    // Create two widgets for the 2x2 grids
-    QWidget *gridWidget1 = new QWidget(status_light_widget);
-    QWidget *gridWidget2 = new QWidget(status_light_widget);
-
-    // Setup each 2x2 grid with vertical lights
-    setupSingleLightGrid(gridWidget1, "Control Modes", "Waypoint Control", "Dynamic Positioning", "Altitude Hold", "Depth Hold",
-                         "On", "Available", "Unavailable", "blue", "green", "red");
-    setupSingleLightGrid(gridWidget2, "Sensor Status", "DVL", "IMU", "Depth Sensor", "USBL",
-                         "Available", "Degraded", "Unavailable", "green", "yellow", "red");
-
-    // Add the two grids to the main layout
-    mainGridLayout->addWidget(gridWidget1);
-    mainGridLayout->addWidget(gridWidget2);
-
-    status_light_widget->setLayout(mainGridLayout);
-}
-
-void GUI::setupSingleLightGrid(QWidget *parent, const QString &groupName, const QString& status1, const QString& status2, const QString& status3, const QString& status4,
-                               const QString& indicator1, const QString& indicator2, const QString& indicator3, 
-                               const QString& light_color1, const QString& light_color2, const QString& light_color3) {
-    // Outer layout for this grid
-    QVBoxLayout *outerLayout = new QVBoxLayout(parent);
-
-    // Title for the group
-    QLabel *groupLabel = new QLabel(groupName, parent);
-    groupLabel->setAlignment(Qt::AlignCenter);
-    groupLabel->setStyleSheet("font-weight: bold;");
-    outerLayout->addWidget(groupLabel);
-
-    // Grid layout for the 2x2 status lights
-    QGridLayout *gridLayout = new QGridLayout;
-    QStringList statuses = {status1, status2, status3, status4};
-
-    for (int i = 0; i < 4; ++i) {
-        QLabel *label = new QLabel(statuses[i], parent);
-        label->setAlignment(Qt::AlignCenter);
-        label->setStyleSheet("font-weight: bold;");
-
-        QLabel *light = new QLabel(parent);
-        light->setFixedSize(40, 40); // Status light size
-        light->setStyleSheet("background-color: red; border-radius: 20px; border: 1px solid black;");
-
-        gridLayout->addWidget(label, i / 2 * 2, i % 2, Qt::AlignCenter);
-        gridLayout->addWidget(light, i / 2 * 2 + 1, i % 2, Qt::AlignCenter);
-    }
-
-    outerLayout->addLayout(gridLayout);
-
-    // Vertical layout for color indicators
-    QVBoxLayout *colorIndicatorLayout = new QVBoxLayout;
-
-    QStringList colorDescriptions = {indicator1, indicator2, indicator3};
-    QStringList colors = {light_color1, light_color2, light_color3};
-
-    for (int i = 0; i < 3; ++i) {
-        QHBoxLayout *indicatorLayout = new QHBoxLayout;
-
-        QLabel *colorLight = new QLabel(parent);
-        colorLight->setFixedSize(20, 20); // Smaller light size
-        colorLight->setStyleSheet(QString("background-color: %1; border-radius: 10px; border: 1px solid black;")
-                                      .arg(colors[i]));
-
-        QLabel *colorLabel = new QLabel(colorDescriptions[i], parent);
-        colorLabel->setStyleSheet("font-weight: bold;");
-
-        indicatorLayout->addWidget(colorLight);
-        indicatorLayout->addWidget(colorLabel);
-
-        colorIndicatorLayout->addLayout(indicatorLayout);
-    }
-
-    outerLayout->addLayout(colorIndicatorLayout);
 }
