@@ -4,13 +4,27 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
 
     setWindowTitle("MINERVA II CONTROL SYSTEM");
     setFixedSize(1920, 1080);
-    // Main Layout
-    QHBoxLayout *main_layout= new QHBoxLayout(this);
+    setStyleSheet("background-color: white");
+
+    // main layout
+    QVBoxLayout *main_layout = new QVBoxLayout(this);
     this->setLayout(main_layout);
+
+    // We want tabs
+    QTabWidget *tab_widget = new QTabWidget();
+
+    ////////////////////////////////////////////////////////////// TAB 1 ///////////////////////////////////////////////////////////
+    // TAB1 widget
+    QWidget *tab1 = new QWidget();
+    //tab1->setStyleSheet("background-color: white");
+
+    // Main Layout
+    QHBoxLayout *tab1_layout= new QHBoxLayout(this);
 
     // Layouts
     left_layout_ = new QVBoxLayout;
     right_layout_ = new QVBoxLayout;
+    stop_layout_ = new QVBoxLayout;
 
     // Buttons widget
     buttons_widget_ = new buttons(this);
@@ -31,24 +45,76 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     title->setAlignment(Qt::AlignCenter);
     title->setStyleSheet("font-weight: bold; font-size: 20px;");
 
+    // Indicator light widget
+    status_light_widget = new indicators(this);
+
+    // Stop button widget
+    stop_button_ = new QPushButton("EMERGENCY\n STOP", this);
+    stop_button_->setCheckable(true);
+    stop_button_->setStyleSheet("background-color: darkred; color: black; font-size: 20px; ");
+    stop_button_->setFixedSize(200, 200);
+    connect(stop_button_, &QPushButton::clicked, this, &GUI::on_stop_button);
+
+    // Waypoint list widget
+    waypoint_list_widget_ = new waypoint_list(this);
+
+    // Display numbers
+    number_display_widget_ = new number_display(this);
+
+
+    // Add widgets to layouts
+    left_layout_->addWidget(buttons_widget_);  // Left: Buttons
+    left_layout_->addWidget(compass_widget_, 16);  // Left: Compass
+    left_layout_->addWidget(number_display_widget_, 1);  // Left: Numbers
+    right_layout_->addWidget(title);
+    right_layout_->addWidget(status_light_widget,1); 
+    right_layout_->addWidget(thrusters_widget_, 3); // Right: Status + Terminal
+    stop_layout_->addWidget(stop_button_, 1);
+    stop_layout_->addWidget(waypoint_list_widget_, 3);
+    stop_layout_->setAlignment(stop_button_, Qt::AlignCenter);
+    tab1_layout->addLayout(left_layout_, 1);  // Left: Buttons
+    tab1_layout->addLayout(right_layout_, 3); // Right: Status + Terminal
+    tab1_layout->addLayout(stop_layout_, 1);  // Stop Button
+
+    tab1->setLayout(tab1_layout);
+
+    ////////////////////////////////////////////////////////////// TAB 2 - WAYPOINT CONTROLLER ///////////////////////////////////////////////////////////
+    // TAB2 widget
+    QWidget *tab2 = new QWidget();
+
+
+
+
+
+    ////////////////////////////////////////////////////////////// TAB 3 - DP CONTROLLER /////////////////////////////////////////////////////////////////
+    QWidget *tab3 = new QWidget();
+
+
+
+
+    ////////////////////////////////////////////////////////////// TAB 4 - Parameter Tuning ////////////////////////////////////////////////////////////
+    QWidget *tab4 = new QWidget();
+
+
+    ////////////////////////////////////////////////////////////// TAB 5 - System Log ///////////////////////////////////////////////////////////
+    QWidget *tab5 = new QWidget();
+    QVBoxLayout *tab5_layout = new QVBoxLayout(this);
     // Terminal widget
     terminal_ = new QTextEdit(this);
     terminal_->setReadOnly(true); // Make it read-only
     terminal_->setStyleSheet("background-color: black; color: white; font-family: monospace; border: 5px solid gray; border-radius: 5px;");
     write_to_terminal(QString("Welcome to the MINERVA II Control System"));
+    tab5_layout->addWidget(terminal_);
+    tab5->setLayout(tab5_layout);
 
-    // Indicator light widget
-    status_light_widget = new indicators(this);
 
-    // Add widgets to layouts
-    left_layout_->addWidget(buttons_widget_);  // Left: Buttons
-    left_layout_->addWidget(compass_widget_, 16);  // Left: Compass
-    left_layout_->addWidget(thrusters_widget_, 2); // Right: Thruster Indicators
-    right_layout_->addWidget(title);
-    right_layout_->addWidget(terminal_, 3);
-    right_layout_->addWidget(status_light_widget,1); 
-    main_layout->addLayout(left_layout_, 1);  // Left: Buttons
-    main_layout->addLayout(right_layout_, 3); // Right: Status + Terminal
+    // Add tabs
+    tab_widget->addTab(tab1, "Control System");
+    tab_widget->addTab(tab2, "Waypoint Controller");
+    tab_widget->addTab(tab3, "DP Controller");
+    tab_widget->addTab(tab4, "Parameter Tuning");
+    tab_widget->addTab(tab5, "System Log");
+    main_layout->addWidget(tab_widget);
 
     // Show widgets
     this->show();
@@ -136,6 +202,20 @@ void GUI::update_config(const QString &ip, int port1, int port2, int port3) {
 
 // Writes message to terminal and scrolls to bottom
 void GUI::write_to_terminal(const QString &msg) {
-    terminal_->append(msg);
+    QString timeStamp = QTime::currentTime().toString("hh:mm:ss");
+    QString formatted_msg = QString("[%1] %2").arg(timeStamp).arg(msg);
+    terminal_->append(formatted_msg);
     terminal_->moveCursor(QTextCursor::End);
+}
+
+// STOP button pressed
+void GUI::on_stop_button() {
+
+    if (stop_button_->text() == "EMERGENCY\n STOP") {
+        stop_button_->setText("SYSTEM\n STOPPED");
+        stop_button_->setStyleSheet("background-color: darkred; color: black; font-size: 20px;");
+        stop_button_->setCheckable(true);
+        write_to_terminal(QString("Emergency Stop Initiated"));
+    }
+
 }

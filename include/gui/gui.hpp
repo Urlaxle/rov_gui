@@ -8,6 +8,8 @@
 #include <gui/compass_gui.hpp>
 #include <gui/thrusters_gui.hpp>
 #include <gui/indicator_gui.hpp>    
+#include <gui/waypoint_list.hpp>
+#include <gui/number_display.hpp>
 
 // QT 
 #include <QMainWindow>
@@ -31,6 +33,9 @@
 #include <QTransform>
 #include <QTimer>
 #include <QPainter>
+#include <QTabWidget>
+#include <QTime>
+#include <QVBoxLayout>
 
 #include <iostream>
 
@@ -53,6 +58,7 @@ private slots:
     void on_config_button();
     void on_sniffer_button();
     void on_exit_button();
+    void on_stop_button();
 
 private:
 
@@ -65,11 +71,15 @@ private:
     // GUI Elements
     QVBoxLayout* left_layout_;
     QVBoxLayout* right_layout_;
+    QVBoxLayout* stop_layout_;
+    QPushButton* stop_button_;
     buttons* buttons_widget_;
     compass* compass_widget_;
     thrusters* thrusters_widget_;
     QTextEdit* terminal_;
     indicators* status_light_widget;
+    waypoint_list* waypoint_list_widget_;
+    number_display* number_display_widget_;
 };
 
 #endif

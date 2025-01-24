@@ -1,5 +1,48 @@
 #include "gui/thrusters_gui.hpp"
 
+
+
+// For side thrusters
+rotated_bar::rotated_bar(QWidget *parent)
+    : QWidget(parent) {
+    angle_ = 0;
+
+    QGraphicsScene *scene = new QGraphicsScene();
+    bar_ = new QProgressBar();
+
+    QGraphicsProxyWidget *proxy_ = scene->addWidget(bar_);
+    proxy_->setRotation(angle_);
+
+    QGraphicsView *view = new QGraphicsView(scene);
+    view->show();
+
+}
+
+rotated_bar::~rotated_bar() {
+}
+
+void rotated_bar::set_rotation(int angle) {
+    angle_ = angle;
+    set_rotation(angle_);
+    update();
+}
+
+void rotated_bar::setOrientation(Qt::Orientation orientation) {
+    bar_->setOrientation(orientation);
+}
+
+void rotated_bar::setValue(int value) {
+    bar_->setValue(value);
+}
+
+void rotated_bar::setRange(int min, int max) {
+    bar_->setRange(min, max);
+}
+
+
+
+
+
 thrusters::thrusters(QWidget *parent)
     : QWidget(parent) {
     // Thruster Layout
@@ -7,10 +50,11 @@ thrusters::thrusters(QWidget *parent)
     
     for (int i = 0; i < 7; ++i) {
         // Create progress bar
-        bars_[i] = new QProgressBar;
+        bars_[i] = new rotated_bar;
         bars_[i]->setOrientation(Qt::Vertical);
         bars_[i]->setRange(0, 100);
         bars_[i]->setValue(0); // Initial value
+        bars_[i]->set_rotation(90); // Rotate 90 degrees
 
         // Create label
         labels_[i] = new QLabel(labels_text_[i]);
@@ -30,6 +74,6 @@ thrusters::thrusters(QWidget *parent)
 thrusters::~thrusters() {
 }
 
-QProgressBar* thrusters::get_thruster(int i) const {
+rotated_bar* thrusters::get_thruster(int i) const {
     return bars_[i];
 }

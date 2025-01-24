@@ -25,6 +25,8 @@ add_executable(CrazyFlieGUI
     src/gui/compass_gui.cpp
     src/gui/thrusters_gui.cpp
     src/gui/indicator_gui.cpp
+    src/gui/waypoint_list.cpp
+    src/gui/number_display.cpp
     include/gui/gui.hpp
     include/gui/udp_sniffer_gui.hpp
     include/gui/configuration_gui.hpp
@@ -32,6 +34,8 @@ add_executable(CrazyFlieGUI
     include/gui/compass_gui.hpp
     include/gui/thrusters_gui.hpp
     include/gui/indicator_gui.hpp
+    include/gui/waypoint_list.hpp
+    include/gui/number_display.hpp
     resources.qrc
 )
 
