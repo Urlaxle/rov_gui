@@ -39,10 +39,6 @@ void rotated_bar::setRange(int min, int max) {
     bar_->setRange(min, max);
 }
 
-
-
-
-
 thrusters::thrusters(QWidget *parent)
     : QWidget(parent) {
     // Thruster Layout
@@ -50,11 +46,11 @@ thrusters::thrusters(QWidget *parent)
     
     for (int i = 0; i < 7; ++i) {
         // Create progress bar
-        bars_[i] = new rotated_bar;
+        bars_[i] = new QProgressBar();
         bars_[i]->setOrientation(Qt::Vertical);
         bars_[i]->setRange(0, 100);
         bars_[i]->setValue(0); // Initial value
-        bars_[i]->set_rotation(90); // Rotate 90 degrees
+        //bars_[i]->set_rotation(90); // Rotate 90 degrees
 
         // Create label
         labels_[i] = new QLabel(labels_text_[i]);
@@ -74,6 +70,6 @@ thrusters::thrusters(QWidget *parent)
 thrusters::~thrusters() {
 }
 
-rotated_bar* thrusters::get_thruster(int i) const {
+QProgressBar* thrusters::get_thruster(int i) const {
     return bars_[i];
 }

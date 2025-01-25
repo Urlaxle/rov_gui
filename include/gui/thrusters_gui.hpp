@@ -38,11 +38,11 @@ class thrusters : public QWidget {
         explicit thrusters(QWidget *parent = nullptr);
         ~thrusters();
 
-    rotated_bar* get_thruster(int i) const;
+    QProgressBar* get_thruster(int i) const;
 
     private:
         QGridLayout *thruster_layout_;
-        rotated_bar *bars_[7];
+        QProgressBar*bars_[7];
         QLabel *labels_[7];
         QStringList labels_text_= {"T1", "T2", "T3", "T4", "T5", "T6", "T7"};
 };

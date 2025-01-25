@@ -124,7 +124,7 @@ void waypoint_list::confirm_button_pressed() {
     // Check that values are within bounds
     if (altitude_edit_->text().isEmpty() || altitude_edit_->text().toDouble() < 0.5 || altitude_edit_->text().toDouble() > 10.0) {
         altitude_edit_->setStyleSheet("border: 1px solid red;");
-        error_label_->setText("Please enter a value between 0.5 and 10.0");
+        error_label_->setText("Please enter a value between 0.5 and 10.0 [m]");
         return;
     } else {
         altitude_edit_->setStyleSheet("");
@@ -132,6 +132,7 @@ void waypoint_list::confirm_button_pressed() {
 
     if (velocity_edit_->text().isEmpty() || velocity_edit_->text().toDouble() < 0.1 || velocity_edit_->text().toDouble() > 1.0) {
         velocity_edit_->setStyleSheet("border: 1px solid red;");
+        error_label_->setText("Please enter a value between 0.1 and 1.0 [m/s]");
         return;
     } else {
         velocity_edit_->setStyleSheet("");
