@@ -61,14 +61,17 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     // Display numbers
     number_display_widget_ = new number_display(this);
 
+    // Depth and Altitude Plot
+    DepthPlotWidget *depth_plot = new DepthPlotWidget(10.0);
+
 
     // Add widgets to layouts
     left_layout_->addWidget(buttons_widget_);  // Left: Buttons
     left_layout_->addWidget(compass_widget_, 16);  // Left: Compass
-    left_layout_->addWidget(number_display_widget_, 1);  // Left: Numbers
+    left_layout_->addWidget(depth_plot, 1);  // Left: Numbers
     right_layout_->addWidget(title);
-    right_layout_->addWidget(status_light_widget,1); 
-    right_layout_->addWidget(thrusters_widget_, 3); // Right: Status + Terminal
+    right_layout_->addWidget(status_light_widget,2); 
+    right_layout_->addWidget(thrusters_widget_, 2); // Right: Status + Terminal
     stop_layout_->addWidget(stop_button_, 1);
     stop_layout_->addWidget(waypoint_list_widget_, 3);
     stop_layout_->setAlignment(stop_button_, Qt::AlignCenter);

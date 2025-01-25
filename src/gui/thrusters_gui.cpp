@@ -1,30 +1,51 @@
 #include "gui/thrusters_gui.hpp"
+#include <iostream>
+
+
+// Progress Bar starting from middle
+
 
 
 
 // For side thrusters
 rotated_bar::rotated_bar(QWidget *parent)
-    : QWidget(parent) {
-    angle_ = 0;
+    : QGraphicsView(parent) {
+{
 
-    QGraphicsScene *scene = new QGraphicsScene();
+    scene_ = new QGraphicsScene(this);
+    setScene(scene_);
+
+    // Set up a progress bar and embedd it
     bar_ = new QProgressBar();
+    bar_ ->setAlignment(Qt::AlignCenter);
+    bar_->setFixedSize(300, 50);
+    bar_->setTextVisible(false);
+    proxy_ = new QGraphicsProxyWidget();
+    proxy_->setWidget(bar_);
+    scene_->addItem(proxy_);
 
-    QGraphicsProxyWidget *proxy_ = scene->addWidget(bar_);
-    proxy_->setRotation(angle_);
+    setFrameStyle(QFrame::NoFrame);                  // Remove the view's border
+    setRenderHint(QPainter::Antialiasing);
 
-    QGraphicsView *view = new QGraphicsView(scene);
-    view->show();
+    setRenderHint(QPainter::Antialiasing);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setFixedSize(300, 300);
+}
+
 
 }
 
 rotated_bar::~rotated_bar() {
 }
 
+void rotated_bar::set_inverted(bool inverted) {
+    bar_->setInvertedAppearance(inverted);
+}
+
 void rotated_bar::set_rotation(int angle) {
     angle_ = angle;
-    set_rotation(angle_);
-    update();
+    proxy_->setRotation(angle_);
 }
 
 void rotated_bar::setOrientation(Qt::Orientation orientation) {
@@ -41,35 +62,85 @@ void rotated_bar::setRange(int min, int max) {
 
 thrusters::thrusters(QWidget *parent)
     : QWidget(parent) {
+
+
+    // Title widget
+    QLabel* title = new QLabel("Thruster Forces", this);
+    title->setAlignment(Qt::AlignCenter);
+    title->setStyleSheet("font-weight: bold; font-size: 20px;");
+    QVBoxLayout* title_layout = new QVBoxLayout;
+
+
     // Thruster Layout
-    thruster_layout_ = new QGridLayout;
+    thruster_layout_ = new QHBoxLayout();
+
+
+    // Horizontal Thrusters
+    QVBoxLayout* vertical_horizontal_layout = new QVBoxLayout;
+    QHBoxLayout* horizontal_layout_1 = new QHBoxLayout;
+    QHBoxLayout* horizontal_layout_2 = new QHBoxLayout;
+    QGridLayout* grid_horizontal_layout = new QGridLayout;
     
-    for (int i = 0; i < 7; ++i) {
-        // Create progress bar
+    for (int i = 0; i < 4; ++i) {
+        rotated_bars_[i] = new rotated_bar();
+        rotated_bars_[i]->setOrientation(Qt::Horizontal);
+        rotated_bars_[i]->setRange(0, 100);
+        rotated_bars_[i]->setValue(0); // Initial value
+        if (i  == 0 || i ==3 ) {
+            rotated_bars_[i]->set_rotation(-45); // Rotate 270 degrees
+        } else{
+            rotated_bars_[i]->set_rotation(45); // Rotate 90 degrees
+            rotated_bars_[i]->set_inverted(true);
+        }
+
+        if (i < 2) {
+            grid_horizontal_layout->addWidget(rotated_bars_[i], 0, i);  // Add bar
+        } else {
+        grid_horizontal_layout->addWidget(rotated_bars_[i], 2, i-2);  // Add bar
+        }
+        
+    }
+
+
+    horizontal_layout_1->addWidget(rotated_bars_[0]);
+    horizontal_layout_1->addWidget(rotated_bars_[1]);
+    horizontal_layout_2->addWidget(rotated_bars_[2]);
+    horizontal_layout_2->addWidget(rotated_bars_[3]);
+    vertical_horizontal_layout->addLayout(horizontal_layout_1);
+    vertical_horizontal_layout->addLayout(horizontal_layout_2);
+    vertical_horizontal_layout->setSpacing(0);
+
+
+    // Vertical Thrusters
+    QGridLayout* grid_layout = new QGridLayout;
+
+    for (int i = 0; i < 3; ++i) {
         bars_[i] = new QProgressBar();
         bars_[i]->setOrientation(Qt::Vertical);
         bars_[i]->setRange(0, 100);
         bars_[i]->setValue(0); // Initial value
-        //bars_[i]->set_rotation(90); // Rotate 90 degrees
+        bars_[i]->setFixedSize(50, 300);
 
-        // Create label
-        labels_[i] = new QLabel(labels_text_[i]);
-        labels_[i]->setAlignment(Qt::AlignCenter);
-        labels_[i]->setStyleSheet("font-weight: bold;");
-
-        // Add to layout
-        int row = (i < 3) ? 0 : 2; // Top row for first 3 bars, bottom row for next 4 bars
-        int col = (i < 3) ? 1 + (i*2) : (i - 3) * 2;
-        thruster_layout_->addWidget(bars_[i], row, col);  // Add bar
-        thruster_layout_->addWidget(labels_[i], row+1, col);  // Add label below the bar
+        if (i == 0 || i == 2) {
+            grid_layout->addWidget(bars_[i], 0, i);  // Add bar
+        } else {
+            grid_layout->addWidget(bars_[i], 1, i);  // Add bar
+        }
     }
 
-    setLayout(thruster_layout_);
+    thruster_layout_->addLayout(grid_horizontal_layout);
+    thruster_layout_->addLayout(grid_layout);
+
+    // Set layout
+    title_layout->addWidget(title);
+    title_layout->addLayout(thruster_layout_);
+    setLayout(title_layout);
+    //setLayout(thruster_layout_);
 }
 
 thrusters::~thrusters() {
 }
 
-QProgressBar* thrusters::get_thruster(int i) const {
-    return bars_[i];
+rotated_bar* thrusters::get_thruster(int i) const {
+    return rotated_bars_[i];
 }

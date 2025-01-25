@@ -14,21 +14,26 @@
 
 
 
-class rotated_bar : public QWidget {
+
+
+class rotated_bar : public QGraphicsView {
     Q_OBJECT
 
     public:
         explicit rotated_bar(QWidget *parent = nullptr);
         ~rotated_bar();
         void set_rotation(int angle); 
+        void set_inverted(bool inverted);
         void setOrientation(Qt::Orientation orientation);
         void setValue(int value);
         void setRange(int min, int max);
 
     private:
-        int angle_;
         QProgressBar *bar_;
+        qreal angle_;
+        QGraphicsScene *scene_;
         QGraphicsProxyWidget *proxy_;
+
 };
 
 class thrusters : public QWidget {
@@ -38,13 +43,16 @@ class thrusters : public QWidget {
         explicit thrusters(QWidget *parent = nullptr);
         ~thrusters();
 
-    QProgressBar* get_thruster(int i) const;
+    //QProgressBar* get_thruster(int i) const;
+    rotated_bar* get_thruster(int i) const;
 
     private:
-        QGridLayout *thruster_layout_;
-        QProgressBar*bars_[7];
+        QHBoxLayout *thruster_layout_;
+        rotated_bar *rotated_bars_[4];
+        //QProgressBar *bars_[3];
+        QProgressBar *bars_[3];
         QLabel *labels_[7];
-        QStringList labels_text_= {"T1", "T2", "T3", "T4", "T5", "T6", "T7"};
+        QStringList labels_text_= {"VFR", "VFL", "HFR", "HRR", "HFL", "HRL", "VCR"};
 };
 
 #endif

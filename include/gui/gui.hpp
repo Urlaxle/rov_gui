@@ -10,6 +10,7 @@
 #include <gui/indicator_gui.hpp>    
 #include <gui/waypoint_list.hpp>
 #include <gui/number_display.hpp>
+#include <gui/depth_altitude_plot.hpp>
 
 // QT 
 #include <QMainWindow>

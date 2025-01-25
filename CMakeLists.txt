@@ -12,8 +12,17 @@ set(CMAKE_AUTOUIC ON)
 # Find Qt5 packages
 find_package(Qt5 REQUIRED COMPONENTS Widgets Network)
 
+# Find QCustomPlot
+find_path(QCUSTOMPLOT_INCLUDE_DIR qcustomplot.h)
+find_library(QCUSTOMPLOT_LIBRARY qcustomplot)
+
+if (NOT QCUSTOMPLOT_INCLUDE_DIR OR NOT QCUSTOMPLOT_LIBRARY)
+    message(FATAL_ERROR "QCustomPlot not found. Please install it via apt or provide the source files.")
+endif()
+
 # Add include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${QCUSTOMPLOT_INCLUDE_DIR})
 
 # Add the executable
 add_executable(CrazyFlieGUI
@@ -36,11 +45,12 @@ add_executable(CrazyFlieGUI
     include/gui/indicator_gui.hpp
     include/gui/waypoint_list.hpp
     include/gui/number_display.hpp
+    include/gui/depth_altitude_plot.hpp
     resources.qrc
 )
 
 # Link against Qt5 libraries
-target_link_libraries(CrazyFlieGUI Qt5::Widgets Qt5::Network)
+target_link_libraries(CrazyFlieGUI Qt5::Widgets Qt5::Network ${QCUSTOMPLOT_LIBRARY})
 
 # Ensure MOC files are generated correctly
 target_include_directories(CrazyFlieGUI PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
