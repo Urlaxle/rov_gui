@@ -87,6 +87,7 @@ private:
     indicators* status_light_widget_;
     waypoint_list* waypoint_list_widget_;
     number_display* number_display_widget_;
+    DepthPlotWidget* depth_plot_;
 
     // Communication parameters
     QUdpSocket* control_socket_;

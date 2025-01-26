@@ -18,7 +18,7 @@ rotated_bar::rotated_bar(QWidget *parent)
     // Set up a progress bar and embedd it
     bar_ = new QProgressBar();
     bar_ ->setAlignment(Qt::AlignCenter);
-    bar_->setFixedSize(300, 50);
+    bar_->setFixedSize(120, 40);
     bar_->setTextVisible(false);
     proxy_ = new QGraphicsProxyWidget();
     proxy_->setWidget(bar_);
@@ -30,7 +30,7 @@ rotated_bar::rotated_bar(QWidget *parent)
     setRenderHint(QPainter::Antialiasing);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setFixedSize(300, 300);
+    setFixedSize(120, 120);
 }
 
 
@@ -119,7 +119,7 @@ thrusters::thrusters(QWidget *parent)
         bars_[i]->setOrientation(Qt::Vertical);
         bars_[i]->setRange(0, 100);
         bars_[i]->setValue(0); // Initial value
-        bars_[i]->setFixedSize(50, 300);
+        bars_[i]->setFixedSize(40, 120);
         bars_[i]->setTextVisible(false);
 
         if (i == 0 || i == 2) {

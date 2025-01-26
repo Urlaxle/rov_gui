@@ -62,16 +62,18 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     number_display_widget_ = new number_display(this);
 
     // Depth and Altitude Plot
-    DepthPlotWidget *depth_plot = new DepthPlotWidget(10.0);
+    depth_plot_ = new DepthPlotWidget(60.0);
 
 
     // Add widgets to layouts
     left_layout_->addWidget(buttons_widget_);  // Left: Buttons
     left_layout_->addWidget(compass_widget_, 16);  // Left: Compass
-    left_layout_->addWidget(depth_plot, 1);  // Left: Numbers
+    //left_layout_->addWidget(depth_plot_, 1);  // Left: Numbers
+    left_layout_->addWidget(thrusters_widget_, 1);  // Left: Numbers
     right_layout_->addWidget(title);
     right_layout_->addWidget(status_light_widget_,2); 
-    right_layout_->addWidget(thrusters_widget_, 2); // Right: Status + Terminal
+    right_layout_->addWidget(depth_plot_, 3); // Right: Status + Terminal
+    //right_layout_->addWidget(thrusters_widget_, 2); // Right: Status + Terminal
     stop_layout_->addWidget(stop_button_, 1);
     stop_layout_->addWidget(waypoint_list_widget_, 3);
     stop_layout_->setAlignment(stop_button_, Qt::AlignCenter);
@@ -286,6 +288,22 @@ void GUI::toogle_listening() {
                     // Update Compass Rose
                     if (data.at(0) == "$COMPASS") {
                         compass_widget_->set_heading(std::stod(data.at(1)), std::stod(data.at(2)));
+                    }
+
+                    // Update depth and altitude
+                    if (data.at(0) == "$DEPTH") {
+                        depth_plot_->addDepthData(std::stod(data.at(1)));
+                        if (std::stod(data.at(2)) > 0 ) {
+                            depth_plot_->setDepthHold(std::stod(data.at(2)));
+                        } else {
+                            depth_plot_->clearDepthHold();
+                        }
+                        depth_plot_->addAltitudeData(std::stod(data.at(3)));
+                        if (std::stod(data.at(4)) > 0 ) {
+                            depth_plot_->setAltitudeHold(std::stod(data.at(4)));
+                        } else {
+                            depth_plot_->clearAltitudeHold();
+                        }
                     }
                 }
 
