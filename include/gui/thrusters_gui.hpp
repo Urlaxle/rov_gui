@@ -27,6 +27,7 @@ class rotated_bar : public QGraphicsView {
         void setOrientation(Qt::Orientation orientation);
         void setValue(int value);
         void setRange(int min, int max);
+        void set_bar_red(bool b);
 
     private:
         QProgressBar *bar_;
@@ -45,11 +46,11 @@ class thrusters : public QWidget {
 
     //QProgressBar* get_thruster(int i) const;
     rotated_bar* get_thruster(int i) const;
+    void set_thruster_value(int thruster, int value);
 
     private:
         QHBoxLayout *thruster_layout_;
         rotated_bar *rotated_bars_[4];
-        //QProgressBar *bars_[3];
         QProgressBar *bars_[3];
         QLabel *labels_[7];
         QStringList labels_text_= {"VFR", "VFL", "HFR", "HRR", "HFL", "HRL", "VCR"};

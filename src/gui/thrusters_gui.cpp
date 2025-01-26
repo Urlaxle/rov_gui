@@ -120,6 +120,7 @@ thrusters::thrusters(QWidget *parent)
         bars_[i]->setRange(0, 100);
         bars_[i]->setValue(0); // Initial value
         bars_[i]->setFixedSize(50, 300);
+        bars_[i]->setTextVisible(false);
 
         if (i == 0 || i == 2) {
             grid_layout->addWidget(bars_[i], 0, i);  // Add bar
@@ -143,4 +144,40 @@ thrusters::~thrusters() {
 
 rotated_bar* thrusters::get_thruster(int i) const {
     return rotated_bars_[i];
+}
+
+void thrusters::set_thruster_value(int thruster, int value) {
+    if (thruster >= 2 && thruster <= 5) {
+        int idx = thruster - 2;
+        rotated_bars_[idx]->setValue(std::abs(value));
+        if (value < 0) {
+            rotated_bars_[idx]->set_bar_red(true);
+        } else {
+            rotated_bars_[idx]->set_bar_red(false);
+        }
+    } else {
+        if (thruster == 6) {
+            bars_[2]->setValue(std::abs(value));
+            if (value < 0) {
+                bars_[2]->setStyleSheet("QProgressBar::chunk { background-color: red; }");
+            } else {
+                bars_[2]->setStyleSheet("QProgressBar::chunk { background-color: green; }");
+            }
+        } else {
+            bars_[thruster]->setValue(std::abs(value));
+            if (value < 0) {
+                bars_[thruster]->setStyleSheet("QProgressBar::chunk { background-color: red; }");
+            } else {
+                bars_[thruster]->setStyleSheet("QProgressBar::chunk { background-color: green; }");
+            }
+    }
+    }
+}
+
+void rotated_bar::set_bar_red(bool b) {
+    if (b) {
+        bar_->setStyleSheet("QProgressBar::chunk { background-color: red; }");
+    } else {
+        bar_->setStyleSheet("QProgressBar::chunk { background-color: green; }");
+    }
 }

@@ -15,12 +15,16 @@ public:
     explicit compass(QWidget *parent = nullptr);
     ~compass();
 
+    void set_heading(const int& heading, const int& heading_hold);
+
     protected:
         void paintEvent(QPaintEvent *event) override;
 
     private:
         QPixmap robot_image;
         qreal heading_angle;
+        qreal heading_setpoint;
+        bool show_setpoint = false;
 
     private:
         void update_heading();

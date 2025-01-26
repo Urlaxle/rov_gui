@@ -8,12 +8,25 @@
 #include <QGridLayout>
 #include <QLabel>
 
+
 class indicators : public QWidget {
     Q_OBJECT
 
     public:
         explicit indicators(QWidget *parent = nullptr);
         ~indicators();
+
+        // Sensor status
+        void set_dvl_status(int status);
+        void set_imu_status(int status);
+        void set_depth_status(int status);
+        void set_usbl_status(int status);
+
+        // Controller status
+        void set_waypoint_status(int status);
+        void set_dynamic_status(int status);
+        void set_altitude_status(int status);
+        void set_depth_hold_status(int status);
 
     private:
         

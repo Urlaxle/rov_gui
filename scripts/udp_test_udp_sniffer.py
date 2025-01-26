@@ -26,7 +26,7 @@ def send_udp_message(message, ip='127.0.0.1', port=12345):
 if __name__ == "__main__":
     # Define your message here
     test_message = "Hello terminal!"
-    test_port = 8760  # Change to match your terminal's listening port
+    test_port = 8571  # Change to match your terminal's listening port
     amount = 100
     for i in range(amount):
         send_udp_message(test_message, port=test_port)

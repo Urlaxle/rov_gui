@@ -46,7 +46,7 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     title->setStyleSheet("font-weight: bold; font-size: 20px;");
 
     // Indicator light widget
-    status_light_widget = new indicators(this);
+    status_light_widget_ = new indicators(this);
 
     // Stop button widget
     stop_button_ = new QPushButton("EMERGENCY\n STOP", this);
@@ -70,7 +70,7 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     left_layout_->addWidget(compass_widget_, 16);  // Left: Compass
     left_layout_->addWidget(depth_plot, 1);  // Left: Numbers
     right_layout_->addWidget(title);
-    right_layout_->addWidget(status_light_widget,2); 
+    right_layout_->addWidget(status_light_widget_,2); 
     right_layout_->addWidget(thrusters_widget_, 2); // Right: Status + Terminal
     stop_layout_->addWidget(stop_button_, 1);
     stop_layout_->addWidget(waypoint_list_widget_, 3);
@@ -119,6 +119,9 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     tab_widget->addTab(tab5, "System Log");
     main_layout->addWidget(tab_widget);
 
+    // Setup socket
+    control_socket_ = new QUdpSocket(this);
+
     // Show widgets
     this->show();
 }
@@ -141,6 +144,7 @@ void GUI::on_start_button() {
         config_button->setEnabled(true);
         sniffer_button->setEnabled(true);
         write_to_terminal(QString("Control System stopped"));
+        toogle_listening();
     } 
     // Sends message to control PC that the system should stop 
     else {
@@ -151,6 +155,7 @@ void GUI::on_start_button() {
         sniffer_button->setDisabled(true);
 
         write_to_terminal(QString("Control System started"));
+        toogle_listening();
     }
 }
 
@@ -221,4 +226,79 @@ void GUI::on_stop_button() {
         write_to_terminal(QString("Emergency Stop Initiated"));
     }
 
+}
+
+// UDP Parser
+void GUI::toogle_listening() {
+
+    // If we are not listening, start to listen
+    if (!control_is_listening_) {
+
+        // Binds port and starts to listen
+        if (control_socket_->bind(QHostAddress::Any, control_port_)) {
+            control_is_listening_ = true;
+
+            // Capturing incoming messages
+            connect(control_socket_, &QUdpSocket::readyRead, this, [this](){
+                while (control_socket_->hasPendingDatagrams()) {
+                    QByteArray datagram;
+                    datagram.resize(control_socket_->pendingDatagramSize());
+                    QHostAddress sender;
+                    quint16 sender_port;
+                    control_socket_->readDatagram(datagram.data(), datagram.size(), &sender, &sender_port);
+
+                    // Split the message into parts
+                    std::string message = datagram.toStdString();
+                    size_t start = 0;
+                    size_t end;
+                    std::vector<std::string> data; // Use std::string for consistency
+                    while ((end = message.find(",", start)) != std::string::npos) {
+                        data.push_back(message.substr(start, end - start));
+                        start = end + 1;
+                    }
+                    data.push_back(message.substr(start));
+
+                    // Take action based on arrived message
+                    if (data.at(0) == "$STATUS") { // Format $STATUS,DVL,IMU,DEPTH,USBL,WAYPOINT,DYNAMIC,ALTITUDE,DEPTH_HOLD
+                        // Update Indicators
+                        status_light_widget_->set_dvl_status(std::stoi(data.at(1)));
+                        status_light_widget_->set_imu_status(std::stoi(data.at(2)));
+                        status_light_widget_->set_depth_status(std::stoi(data.at(3)));
+                        status_light_widget_->set_usbl_status(std::stoi(data.at(4)));
+                        status_light_widget_->set_waypoint_status(std::stoi(data.at(5)));
+                        status_light_widget_->set_dynamic_status(std::stoi(data.at(6)));
+                        status_light_widget_->set_altitude_status(std::stoi(data.at(7)));
+                        status_light_widget_->set_depth_hold_status(std::stoi(data.at(8)));
+                    }
+
+                    // Update thruster values
+                    if (data.at(0) == "$THR") {
+                        // Update thruster values
+                        thrusters_widget_->set_thruster_value(0, std::stoi(data.at(1)));
+                        thrusters_widget_->set_thruster_value(1, std::stoi(data.at(2)));
+                        thrusters_widget_->set_thruster_value(2, std::stoi(data.at(3)));
+                        thrusters_widget_->set_thruster_value(3, std::stoi(data.at(4)));
+                        thrusters_widget_->set_thruster_value(4, std::stoi(data.at(5)));
+                        thrusters_widget_->set_thruster_value(5, std::stoi(data.at(6)));
+                        thrusters_widget_->set_thruster_value(6, std::stoi(data.at(7)));
+                    }
+
+                    // Update Compass Rose
+                    if (data.at(0) == "$COMPASS") {
+                        compass_widget_->set_heading(std::stod(data.at(1)), std::stod(data.at(2)));
+                    }
+                }
+
+            });
+        }
+    } else {
+        // Stop listening
+        control_socket_->close();
+        control_is_listening_ = false;
+    }
+
+}
+
+void GUI::close() {
+    control_socket_->close();
 }

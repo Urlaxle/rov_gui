@@ -33,17 +33,17 @@ indicators::indicators(QWidget *parent) : QWidget(parent) {
     depth_label->setStyleSheet("font-weight: bold;");
 
     waypoint_indicator_ = new QLabel(control_widget_);
-    waypoint_indicator_->setFixedSize(40, 40);
-    waypoint_indicator_->setStyleSheet("background-color: red; border-radius: 20px; border: 1px solid black;");
+    waypoint_indicator_->setFixedSize(60, 60);
+    waypoint_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
     dynamic_indicator_ = new QLabel(control_widget_);
-    dynamic_indicator_->setFixedSize(40, 40);
-    dynamic_indicator_->setStyleSheet("background-color: red; border-radius: 20px; border: 1px solid black;");
+    dynamic_indicator_->setFixedSize(60, 60);
+    dynamic_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
     altitude_indicator_ = new QLabel(control_widget_);
-    altitude_indicator_->setFixedSize(40, 40);
-    altitude_indicator_->setStyleSheet("background-color: red; border-radius: 20px; border: 1px solid black;");
+    altitude_indicator_->setFixedSize(60, 60);
+    altitude_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
     depth_hold_indicator_ = new QLabel(control_widget_);
-    depth_hold_indicator_->setFixedSize(40, 40);
-    depth_hold_indicator_->setStyleSheet("background-color: red; border-radius: 20px; border: 1px solid black;");
+    depth_hold_indicator_->setFixedSize(60, 60);
+    depth_hold_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
 
     control_grid_->addWidget(waypoint_label, 0, 0, Qt::AlignCenter);
     control_grid_->addWidget(waypoint_indicator_, 1, 0, Qt::AlignCenter);
@@ -108,17 +108,17 @@ indicators::indicators(QWidget *parent) : QWidget(parent) {
     usbl_label->setStyleSheet("font-weight: bold;");
 
     dvl_indicator_ = new QLabel(sensor_widget_);
-    dvl_indicator_->setFixedSize(40, 40);
-    dvl_indicator_->setStyleSheet("background-color: red; border-radius: 20px; border: 1px solid black;");
+    dvl_indicator_->setFixedSize(60, 60);
+    dvl_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
     imu_indicator_ = new QLabel(sensor_widget_);
-    imu_indicator_->setFixedSize(40, 40);
-    imu_indicator_->setStyleSheet("background-color: red; border-radius: 20px; border: 1px solid black;");
+    imu_indicator_->setFixedSize(60, 60);
+    imu_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
     depth_indicator_= new QLabel(sensor_widget_);
-    depth_indicator_->setFixedSize(40, 40);
-    depth_indicator_->setStyleSheet("background-color: red; border-radius: 20px; border: 1px solid black;");
+    depth_indicator_->setFixedSize(60, 60);
+    depth_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
     usbl_indicator_ = new QLabel(sensor_widget_);
-    usbl_indicator_->setFixedSize(40, 40);
-    usbl_indicator_->setStyleSheet("background-color: red; border-radius: 20px; border: 1px solid black;");
+    usbl_indicator_->setFixedSize(60, 60);
+    usbl_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
 
     sensor_grid_->addWidget(dvl_label, 0, 0, Qt::AlignCenter);
     sensor_grid_->addWidget(dvl_indicator_, 1, 0, Qt::AlignCenter);
@@ -159,3 +159,116 @@ indicators::indicators(QWidget *parent) : QWidget(parent) {
 
 indicators::~indicators() {
 }
+
+// Status Indicator
+void indicators::set_dvl_status(int status) {
+    switch (status) {
+        case 0:
+            dvl_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 1:
+            dvl_indicator_->setStyleSheet("background-color: green; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 2:
+            dvl_indicator_->setStyleSheet("background-color: yellow; border-radius: 30px; border: 1px solid black;");
+            break;
+    }
+}
+
+void indicators::set_imu_status(int status) {
+    switch (status) {
+        case 0:
+            imu_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 1:
+            imu_indicator_->setStyleSheet("background-color: green; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 2:
+            imu_indicator_->setStyleSheet("background-color: yellow; border-radius: 30px; border: 1px solid black;");
+            break;
+    }
+}
+
+void indicators::set_depth_status(int status) {
+    switch (status) {
+        case 0:
+            depth_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 1:
+            depth_indicator_->setStyleSheet("background-color: green; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 2:
+            depth_indicator_->setStyleSheet("background-color: yellow; border-radius: 30px; border: 1px solid black;");
+            break;
+    }
+}
+
+void indicators::set_usbl_status(int status) {
+    switch (status) {
+        case 0:
+            usbl_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 1:
+            usbl_indicator_->setStyleSheet("background-color: green; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 2:
+            usbl_indicator_->setStyleSheet("background-color: yellow; border-radius: 30px; border: 1px solid black;");
+            break;
+    }
+}
+
+void indicators::set_waypoint_status(int status) {
+    switch (status) {
+        case 0:
+            waypoint_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 1:
+            waypoint_indicator_->setStyleSheet("background-color: green; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 2:
+            waypoint_indicator_->setStyleSheet("background-color: blue; border-radius: 30px; border: 1px solid black;");
+            break;
+    }
+}
+
+void indicators::set_dynamic_status(int status) {
+    switch (status) {
+        case 0:
+            dynamic_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 1:
+            dynamic_indicator_->setStyleSheet("background-color: green; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 2:
+            dynamic_indicator_->setStyleSheet("background-color: blue; border-radius: 30px; border: 1px solid black;");
+            break;
+    }
+}
+
+void indicators::set_altitude_status(int status) {
+    switch (status) {
+        case 0:
+            altitude_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 1:
+            altitude_indicator_->setStyleSheet("background-color: green; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 2:
+            altitude_indicator_->setStyleSheet("background-color: blue; border-radius: 30px; border: 1px solid black;");
+            break;
+    }
+}
+
+void indicators::set_depth_hold_status(int status) {
+    switch (status) {
+        case 0:
+            depth_hold_indicator_->setStyleSheet("background-color: red; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 1:
+            depth_hold_indicator_->setStyleSheet("background-color: green; border-radius: 30px; border: 1px solid black;");
+            break;
+        case 2:
+            depth_hold_indicator_->setStyleSheet("background-color: blue; border-radius: 30px; border: 1px solid black;");
+            break;
+    }
+}   

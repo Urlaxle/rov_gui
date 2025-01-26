@@ -37,8 +37,11 @@
 #include <QTabWidget>
 #include <QTime>
 #include <QVBoxLayout>
+#include <QUdpSocket>
 
 #include <iostream>
+#include <string_view>
+#include <vector>
 
 
 // MAIN GUI
@@ -61,6 +64,9 @@ private slots:
     void on_exit_button();
     void on_stop_button();
 
+    void toogle_listening();
+    void close();
+
 private:
 
     // IP address and port of the control PC
@@ -78,9 +84,16 @@ private:
     compass* compass_widget_;
     thrusters* thrusters_widget_;
     QTextEdit* terminal_;
-    indicators* status_light_widget;
+    indicators* status_light_widget_;
     waypoint_list* waypoint_list_widget_;
     number_display* number_display_widget_;
+
+    // Communication parameters
+    QUdpSocket* control_socket_;
+    quint16 control_port_ = 8571;
+    bool control_is_listening_ = false;
+
+
 };
 
 #endif
