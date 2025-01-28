@@ -51,7 +51,7 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     // Stop button widget
     stop_button_ = new QPushButton("EMERGENCY\n STOP", this);
     stop_button_->setCheckable(true);
-    stop_button_->setStyleSheet("background-color: darkred; color: black; font-size: 20px; ");
+    stop_button_->setStyleSheet("background-color: darkred; color: white; font-size: 20px; ");
     stop_button_->setFixedSize(200, 200);
     connect(stop_button_, &QPushButton::clicked, this, &GUI::on_stop_button);
 
@@ -91,14 +91,28 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
 
 
 
+
+
+
+
     ////////////////////////////////////////////////////////////// TAB 3 - DP CONTROLLER /////////////////////////////////////////////////////////////////
     QWidget *tab3 = new QWidget();
 
 
 
 
+
     ////////////////////////////////////////////////////////////// TAB 4 - Parameter Tuning ////////////////////////////////////////////////////////////
     QWidget *tab4 = new QWidget();
+
+    QHBoxLayout *tab4_layout= new QHBoxLayout(this);
+
+    // PID GAINS
+    PID_GUI *pid_widget = new PID_GUI(this);
+
+    tab4_layout->addWidget(pid_widget);
+
+    tab4->setLayout(tab4_layout);
 
 
     ////////////////////////////////////////////////////////////// TAB 5 - System Log ///////////////////////////////////////////////////////////

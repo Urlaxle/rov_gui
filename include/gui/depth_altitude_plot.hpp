@@ -71,10 +71,12 @@ public:
         // Depth Hold
         plot->addGraph(); // Depth hold indicator
         plot->graph(2)->setPen(QPen(Qt::blue, 2, Qt::DashLine)); // Blue dashed line for depth hold
+        plot->graph(2)->setName("Depth Setpoint");
 
         // Altitude Hold
         plot->addGraph(plot->xAxis, rightAxis);
         plot->graph(3)->setPen(QPen(Qt::red, 2, Qt::DashLine)); // Red dashed line for altitude hold
+        plot->graph(3)->setName("Altitude Setpoint");
 
 
         // Timer to refresh the plot

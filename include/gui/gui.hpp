@@ -11,6 +11,7 @@
 #include <gui/waypoint_list.hpp>
 #include <gui/number_display.hpp>
 #include <gui/depth_altitude_plot.hpp>
+#include <gui/pid_gui.hpp>
 
 // QT 
 #include <QMainWindow>

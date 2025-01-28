@@ -36,6 +36,7 @@ add_executable(CrazyFlieGUI
     src/gui/indicator_gui.cpp
     src/gui/waypoint_list.cpp
     src/gui/number_display.cpp
+    src/gui/pid_gui.cpp
     include/gui/gui.hpp
     include/gui/udp_sniffer_gui.hpp
     include/gui/configuration_gui.hpp
@@ -46,6 +47,7 @@ add_executable(CrazyFlieGUI
     include/gui/waypoint_list.hpp
     include/gui/number_display.hpp
     include/gui/depth_altitude_plot.hpp
+    include/gui/pid_gui.hpp
     resources.qrc
 )
 
