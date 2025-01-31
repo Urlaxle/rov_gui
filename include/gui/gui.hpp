@@ -12,6 +12,7 @@
 #include <gui/number_display.hpp>
 #include <gui/depth_altitude_plot.hpp>
 #include <gui/pid_gui.hpp>
+#include <gui/altitude_gui.hpp>
 
 // QT 
 #include <QMainWindow>
@@ -89,6 +90,7 @@ private:
     waypoint_list* waypoint_list_widget_;
     number_display* number_display_widget_;
     DepthPlotWidget* depth_plot_;
+    AltitudeTuning* altitude_tuning_widget_;
 
     // Communication parameters
     QUdpSocket* control_socket_;

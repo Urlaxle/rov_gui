@@ -126,6 +126,14 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     tab5_layout->addWidget(terminal_);
     tab5->setLayout(tab5_layout);
 
+    ////////////////////////////////////////////////////////////// TAB 6 - Altitude Tuning ///////////////////////////////////////////////////////////
+    QWidget *tab6 = new QWidget();
+    QVBoxLayout *tab6_layout = new QVBoxLayout(this);
+    altitude_tuning_widget_ = new AltitudeTuning(this);
+    tab6_layout->addWidget(altitude_tuning_widget_);
+    tab6->setLayout(tab6_layout);
+
+    ////////////////////////////////////////////////////////////// Setup GUI ///////////////////////////////////////////////////////////
 
     // Add tabs
     tab_widget->addTab(tab1, "Control System");
@@ -133,6 +141,7 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     tab_widget->addTab(tab3, "DP Controller");
     tab_widget->addTab(tab4, "Parameter Tuning");
     tab_widget->addTab(tab5, "System Log");
+    tab_widget->addTab(tab6, "Altitude Tuning");
     main_layout->addWidget(tab_widget);
 
     // Setup socket
@@ -318,6 +327,10 @@ void GUI::toogle_listening() {
                         } else {
                             depth_plot_->clearAltitudeHold();
                         }
+                    }
+
+                    if (data.at(0) == "$ALTITUDE") {
+                        altitude_tuning_widget_->update_altitude(std::stod(data.at(1)));
                     }
                 }
 
