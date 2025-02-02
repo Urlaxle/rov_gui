@@ -34,6 +34,7 @@ class AltitudeTuning: public QWidget {
         void send_udp_msg(const QString &msg);
         void update_parameters();
         void incoming_messages();
+        void store_parameters();
 
     private:
 

@@ -139,9 +139,11 @@ AltitudeTuning::AltitudeTuning(QWidget *parent) : QWidget(parent) {
     // Unlock Button
     QPushButton *unlock_button = new QPushButton("Unlock Parameters", this);
     QPushButton *send_parameters = new QPushButton("Send Parameters", this);
+    QPushButton *store_parameters = new QPushButton("Store Parameters", this);
 
     connect(unlock_button, &QPushButton::clicked, this, &AltitudeTuning::unlock_parameters);
     connect(send_parameters, &QPushButton::clicked, this, &AltitudeTuning::update_parameters);
+    connect(store_parameters, &QPushButton::clicked, this, &AltitudeTuning::store_parameters);
 
     // layout
     altitude_tuning_middle_layout_->addWidget(constant_downforce_label_);
@@ -154,7 +156,23 @@ AltitudeTuning::AltitudeTuning(QWidget *parent) : QWidget(parent) {
     altitude_tuning_middle_layout_->addWidget(altitude_kd_input_);
     altitude_tuning_middle_layout_->addWidget(send_parameters);
     altitude_tuning_middle_layout_->addWidget(unlock_button);
+    altitude_tuning_middle_layout_->addWidget(store_parameters);
     altitude_tuning_middle_layout_->setAlignment(Qt::AlignCenter);
+
+    // Read parameter file if it exists
+    QFile file("parameters.txt");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        QString parameters = stream.readLine();
+        QStringList parameter_list = parameters.split(",");
+        if (parameter_list.size() == 4) {
+            altitude_kp_input_->setText(parameter_list[0]);
+            altitude_ki_input_->setText(parameter_list[1]);
+            altitude_kd_input_->setText(parameter_list[2]);
+            constant_downforce_input_->setText(parameter_list[3]);
+        }
+        file.close();
+    }
 
     ////////////////////////////////// RIGHT LAYOUT //////////////////////////////////
 
@@ -197,6 +215,8 @@ void AltitudeTuning::turn_on() {
     altitude_hold_on_ = !altitude_hold_on_;
     if (altitude_hold_on_) {
         send_udp_msg("$ALTITUDE_HOLD,1");
+        altitude_setpoint_->setText(QString::number(altitude_setpoint_value_));
+        send_udp_msg("$ALTITUDE_SETPOINT," + QString::number(altitude_setpoint_value_));
     } else {
         send_udp_msg("$ALTITUDE_HOLD,0");
     }
@@ -367,6 +387,27 @@ void AltitudeTuning::update_parameters() {
     QString kd = altitude_kd_input_->text();
     QString downforce = constant_downforce_input_->text();
     send_udp_msg("$ALTITUDE_PARAMETERS," + kp + "," + ki + "," + kd + "," + downforce);
+}
+
+void AltitudeTuning::store_parameters() {
+
+    if (!unlock_parameters_) {
+        return;
+    }
+
+    // Store parameters to file
+    QString kp = altitude_kp_input_->text();
+    QString ki = altitude_ki_input_->text();
+    QString kd = altitude_kd_input_->text();
+    QString downforce = constant_downforce_input_->text();
+    QString parameters = kp + "," + ki + "," + kd + "," + downforce;
+    QFile file("parameters.txt");
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        stream << parameters;
+        file.close();
+    }
+
 }
 
 void AltitudeTuning::incoming_messages() {
