@@ -6,6 +6,9 @@ AltitudeTuning::AltitudeTuning(QWidget *parent) : QWidget(parent) {
     QHBoxLayout* altitude_tuning_layout = new QHBoxLayout(this);
     udp_socket_ = new QUdpSocket(this);
 
+    udp_socket_receive_ = new QUdpSocket(this);
+    udp_socket_receive_->bind(QHostAddress::LocalHost, 9101);
+    connect(udp_socket_receive_, &QUdpSocket::readyRead, this, &AltitudeTuning::incoming_messages);
 
     ///////////////////////////////////// LEFT LAYOUT /////////////////////////////////////
 
@@ -292,17 +295,25 @@ void AltitudeTuning::update_plot() {
         altitude_plot_->axisRect()->axis(QCPAxis::atRight)->setRange(minAltitude - altitudePadding, maxAltitude + altitudePadding);
     }
 
-    // If altitude hold is on, add the setpoint to the plot
+    // If altitude hold is on
     if (altitude_hold_on_) {
         QVector<double> xSetpoint, ySetpoint;
-        if (!altitude_timestamps_.empty()) {
-            double relativeStartTime = altitude_timestamps_.front();
-            for (size_t i = 0; i < altitude_timestamps_.size(); ++i) {
-                xSetpoint.append(altitude_timestamps_[i] - relativeStartTime);
-                ySetpoint.append(altitude_setpoint_value_);
-            }
-        }
+
+        // Get the current X-axis range
+        double xMin = altitude_plot_->xAxis->range().lower;
+        double xMax = altitude_plot_->xAxis->range().upper;
+
+        // Create a straight horizontal line at setpoint value
+        xSetpoint.append(xMin);
+        ySetpoint.append(altitude_setpoint_value_);
+
+        xSetpoint.append(xMax);
+        ySetpoint.append(altitude_setpoint_value_);
+
         altitude_plot_->graph(1)->setData(xSetpoint, ySetpoint);
+    } else {
+        // Clear the setpoint line if altitude hold is off
+        altitude_plot_->graph(1)->setData(QVector<double>(), QVector<double>());
     }
 
     altitude_plot_->replot();
@@ -318,7 +329,7 @@ double AltitudeTuning::get_current_timestamp() {
 void AltitudeTuning::update_altitude(double altitude) {
 
     // Update altitude
-    current_altitude_value_ = altitude_setpoint_value_;
+    current_altitude_value_ = altitude;
 
     // Update timestamp
     double timestamp = get_current_timestamp();
@@ -356,4 +367,42 @@ void AltitudeTuning::update_parameters() {
     QString kd = altitude_kd_input_->text();
     QString downforce = constant_downforce_input_->text();
     send_udp_msg("$ALTITUDE_PARAMETERS," + kp + "," + ki + "," + kd + "," + downforce);
+}
+
+void AltitudeTuning::incoming_messages() {
+
+    while (udp_socket_receive_->hasPendingDatagrams()) {
+        QByteArray datagram;
+        datagram.resize(udp_socket_receive_->pendingDatagramSize());
+        QHostAddress sender;
+        quint16 senderPort;
+        udp_socket_receive_->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
+        QString message = QString::fromUtf8(datagram);
+
+        if (message.startsWith("$ALTITUDE,")) {
+            QStringList message_parts = message.split(",");
+            if (message_parts.size() == 2) {
+                double altitude = message_parts[1].toDouble();
+                update_altitude(altitude);
+                if (!altitude_hold_on_) {
+                    altitude_setpoint_value_ = altitude;
+                    altitude_setpoint_->setText(QString::number(altitude_setpoint_value_));
+                }
+            }
+        }
+
+        if (message.startsWith("$ALTITUDE_VALID,")) {
+            QStringList message_parts = message.split(",");
+            if (message_parts.size() == 2) {
+                bool valid = message_parts[1].toInt();
+                altitude_valid_ = valid;
+                if (valid) {
+                    altitude_valid_indicator_->setStyleSheet("background-color: green; border-radius: 90px; border: 1px solid black;");
+                } else {
+                    altitude_valid_indicator_->setStyleSheet("background-color: red; border-radius: 90px; border: 1px solid black;");
+                }
+            }
+        }
+    }
+
 }

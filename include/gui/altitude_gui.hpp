@@ -33,6 +33,7 @@ class AltitudeTuning: public QWidget {
         double get_current_timestamp();
         void send_udp_msg(const QString &msg);
         void update_parameters();
+        void incoming_messages();
 
     private:
 
@@ -57,6 +58,7 @@ class AltitudeTuning: public QWidget {
 
         // Socket
         QUdpSocket* udp_socket_;
+        QUdpSocket* udp_socket_receive_;
 
         // Plot
         QCustomPlot *altitude_plot_;
