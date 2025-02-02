@@ -390,7 +390,6 @@ void AltitudeTuning::incoming_messages() {
                 }
             }
         }
-
         if (message.startsWith("$ALTITUDE_VALID,")) {
             QStringList message_parts = message.split(",");
             if (message_parts.size() == 2) {
