@@ -12,6 +12,9 @@
 #include <QString>
 #include <QInputDialog>
 #include <QDialog>
+#include <QTime>
+#include <QUdpSocket>
+#include <QHostAddress>
 
 class key_dialog : public QDialog {
     Q_OBJECT
@@ -55,6 +58,7 @@ class PID_GUI : public QWidget {
         void high_gains_button_pressed();
         void advanced_button_pressed();
         void set_default_gains();
+        void send_udp_msg(const QString &msg);
 
         void enable_advanced_settings(bool enable);
 
@@ -68,6 +72,8 @@ class PID_GUI : public QWidget {
         QPushButton* high_gains_button_;
         QPushButton* advanced_settings_button_;
 
+        // Socket
+        QUdpSocket* udp_socket_;
 
         // MOVE SIDE
         QLineEdit* surge_move_;

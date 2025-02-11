@@ -12,6 +12,8 @@ PID_GUI::PID_GUI(QWidget *parent)
 
     // PARAMETER GAINS //////////////////////////////////////////////////////////////
 
+    udp_socket_ = new QUdpSocket(this);
+
     QVBoxLayout* gains_layout = new QVBoxLayout;
 
     // Surge gains
@@ -337,15 +339,39 @@ PID_GUI::~PID_GUI() {
 }
 
 void PID_GUI::send_button_pressed() {
-    std::cout << "Send Button Is Pressed!" << std::endl;
+    QString msg = "PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text();
+    send_udp_msg(msg);
+}
+
+void PID_GUI::send_udp_msg(const QString &msg) {
+
+    // Send UDP message
+    QHostAddress target_address = QHostAddress("127.0.0.1");
+    quint16 target_port = 9100;
+    udp_socket_->writeDatagram(msg.toUtf8(), target_address, target_port);
+
 }
 
 void PID_GUI::default_button_pressed() {
-    std::cout << "Default Button Is Pressed!" << std::endl;
+
+    // Medium gains are default atm
+    surge_kp_input_->setText("0.2"); 
+    surge_ki_input_->setText("0.05");
+    surge_kd_input_->setText("0.05");
+    sway_kp_input_->setText("0.2");
+    sway_ki_input_->setText("0.05");
+    sway_kd_input_->setText("0.05");
+    heave_kp_input_->setText("0.25");
+    heave_ki_input_->setText("0.05");
+    heave_kd_input_->setText("0.05");
+    yaw_kp_input_->setText("0.15");
+    yaw_ki_input_->setText("0.05");
+    yaw_kd_input_->setText("0.05");
 }
 
 void PID_GUI::send_command_button_pressed() {
-    std::cout << "Send Command Button Is Pressed!" << std::endl;
+    QString msg = "MOVE," + surge_move_->text() + "," + sway_move_->text() + "," + heave_move_->text() + "," + yaw_move_->text();
+    send_udp_msg(msg);
 }
 
 void PID_GUI::low_gains_button_pressed() {
@@ -353,6 +379,27 @@ void PID_GUI::low_gains_button_pressed() {
     if (low_gains_button_->isChecked()) {
         medium_gains_button_->setChecked(false);
         high_gains_button_->setChecked(false);
+
+        // Change predefined gains accordingly
+        surge_kp_input_->setText("0.2"); 
+        surge_ki_input_->setText("0.05");
+        surge_kd_input_->setText("0.05");
+        sway_kp_input_->setText("0.2");
+        sway_ki_input_->setText("0.05");
+        sway_kd_input_->setText("0.05");
+        heave_kp_input_->setText("0.25");
+        heave_ki_input_->setText("0.05");
+        heave_kd_input_->setText("0.05");
+        yaw_kp_input_->setText("0.15");
+        yaw_ki_input_->setText("0.05");
+        yaw_kd_input_->setText("0.05");
+        surge_move_->setText("0.0");
+        sway_move_->setText("0.0");
+        heave_move_->setText("0.0");
+        yaw_move_->setText("0.0");
+
+        QString msg = "PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text();
+        send_udp_msg(msg);
 
         // Change predefined gains accordingly
     } else {
@@ -368,6 +415,26 @@ void PID_GUI::medium_gains_button_pressed() {
         high_gains_button_->setChecked(false);
 
         // Change predefined gains accordingly
+        surge_kp_input_->setText("0.4"); 
+        surge_ki_input_->setText("0.1");
+        surge_kd_input_->setText("0.15");
+        sway_kp_input_->setText("0.4");
+        sway_ki_input_->setText("0.1");
+        sway_kd_input_->setText("0.15");
+        heave_kp_input_->setText("0.3");
+        heave_ki_input_->setText("0.1");
+        heave_kd_input_->setText("0.1");
+        yaw_kp_input_->setText("0.3");
+        yaw_ki_input_->setText("0.1");
+        yaw_kd_input_->setText("0.2");
+        surge_move_->setText("0.0");
+        sway_move_->setText("0.0");
+        heave_move_->setText("0.0");
+        yaw_move_->setText("0.0");
+
+        QString msg = "PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text();
+        send_udp_msg(msg);
+
     } else {
         // Medium gains already in effect, no need to do anything
         medium_gains_button_->setChecked(true);
@@ -381,6 +448,26 @@ void PID_GUI::high_gains_button_pressed() {
         medium_gains_button_->setChecked(false);
 
         // Change predefined gains accordingly
+        surge_kp_input_->setText("0.6"); 
+        surge_ki_input_->setText("0.2");
+        surge_kd_input_->setText("0.3");
+        sway_kp_input_->setText("0.6");
+        sway_ki_input_->setText("0.2");
+        sway_kd_input_->setText("0.3");
+        heave_kp_input_->setText("0.7");
+        heave_ki_input_->setText("0.3");
+        heave_kd_input_->setText("0.2");
+        yaw_kp_input_->setText("0.6");
+        yaw_ki_input_->setText("0.15");
+        yaw_kd_input_->setText("0.25");
+        surge_move_->setText("0.0");
+        sway_move_->setText("0.0");
+        heave_move_->setText("0.0");
+        yaw_move_->setText("0.0");
+
+        QString msg = "PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text();
+        send_udp_msg(msg);
+
     } else {
         // High gains already in effect, no need to do anything
         high_gains_button_->setChecked(true);
@@ -462,24 +549,24 @@ void PID_GUI::set_default_gains() {
 
     // Set default gains
     surge_downforce_ = 0.0;
-    surge_kp_ = 10.0;
-    surge_ki_ = 0.0;
-    surge_kd_ = 2.0;
+    surge_kp_ = 0.4;
+    surge_ki_ = 0.2;
+    surge_kd_ = 0.2;
 
     sway_downforce_ = 0.0;
-    sway_kp_ = 10.0;
-    sway_ki_ = 0.0;
-    sway_kd_ = 2.0;
+    sway_kp_ = 0.4;
+    sway_ki_ = 0.2;
+    sway_kd_ = 0.2;
 
     heave_downforce_ = 0.0;
-    heave_kp_ = 10.0;
-    heave_ki_ = 0.0;
-    heave_kd_ = 2.0;
+    heave_kp_ = 0.4;
+    heave_ki_ = 0.2;
+    heave_kd_ = 0.2;
 
     yaw_downforce_ = 0.0;
-    yaw_kp_ = 10.0;
-    yaw_ki_ = 0.0;
-    yaw_kd_ = 2.0;
+    yaw_kp_ = 0.4;
+    yaw_ki_ = 0.2;
+    yaw_kd_ = 0.2;
 
     surge_kp_input_->setText(QString::number(surge_kp_));
     surge_ki_input_->setText(QString::number(surge_ki_));
@@ -494,6 +581,10 @@ void PID_GUI::set_default_gains() {
     yaw_ki_input_->setText(QString::number(yaw_ki_));
     yaw_kd_input_->setText(QString::number(yaw_kd_));
 
+    surge_move_->setText("0.0");
+    sway_move_->setText("0.0");
+    heave_move_->setText("0.0");
+    yaw_move_->setText("0.0");
 
     // Set default values to the GUI
     enable_advanced_settings(false);
