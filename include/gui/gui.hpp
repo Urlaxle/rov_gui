@@ -72,7 +72,7 @@ private slots:
 private:
 
     // IP address and port of the control PC
-    QString ip_address_ = "172.16.1.70";
+    QString ip_address_ = "127.0.0.1";
     int control_system_port_ = 8570;
     int system_status_port_ = 8670;
     int mission_status_port_ = 8671;
@@ -94,7 +94,7 @@ private:
 
     // Communication parameters
     QUdpSocket* control_socket_;
-    quint16 control_port_ = 8571;
+    quint16 control_port_ = 9101;
     bool control_is_listening_ = false;
 
 

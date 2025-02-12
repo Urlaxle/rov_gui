@@ -2,7 +2,7 @@
 
 GUI::GUI(QWidget *parent) : QWidget(parent) {
 
-    setWindowTitle("MINERVA II CONTROL SYSTEM");
+    setWindowTitle("BLUEYE CONTROL SYSTEM");
     setFixedSize(1920, 1080);
     setStyleSheet("background-color: white");
 
@@ -36,6 +36,7 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     // Compass widget
     compass_widget_ = new compass;
     compass_widget_->setFixedSize(500, 500);
+    compass_widget_->set_heading(90.0, 0);
 
     // Thruster Widget
     thrusters_widget_ = new thrusters(this);
@@ -137,8 +138,8 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
 
     // Add tabs
     tab_widget->addTab(tab1, "Control System");
-    tab_widget->addTab(tab2, "Waypoint Controller");
-    tab_widget->addTab(tab3, "DP Controller");
+    //tab_widget->addTab(tab2, "Waypoint Controller");
+    //tab_widget->addTab(tab3, "DP Controller");
     tab_widget->addTab(tab4, "Parameter Tuning");
     tab_widget->addTab(tab5, "System Log");
     tab_widget->addTab(tab6, "Altitude Tuning");
@@ -146,6 +147,8 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
 
     // Setup socket
     control_socket_ = new QUdpSocket(this);
+
+    // Set initial heading north
 
     // Show widgets
     this->show();
@@ -310,11 +313,12 @@ void GUI::toogle_listening() {
 
                     // Update Compass Rose
                     if (data.at(0) == "$COMPASS") {
-                        compass_widget_->set_heading(std::stod(data.at(1)), std::stod(data.at(2)));
+                        compass_widget_->set_heading(std::stod(data.at(1)) + 90.0, std::stod(data.at(2)));
                     }
 
                     // Update depth and altitude
                     if (data.at(0) == "$DEPTH") {
+
                         depth_plot_->addDepthData(std::stod(data.at(1)));
                         if (std::stod(data.at(2)) > 0 ) {
                             depth_plot_->setDepthHold(std::stod(data.at(2)));
