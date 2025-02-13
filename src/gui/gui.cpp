@@ -42,7 +42,7 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     thrusters_widget_ = new thrusters(this);
 
     // Title widget
-    QLabel *title = new QLabel("Minerva II Control System", this);
+    QLabel *title = new QLabel("Blueye Control System", this);
     title->setAlignment(Qt::AlignCenter);
     title->setStyleSheet("font-weight: bold; font-size: 20px;");
 
@@ -318,14 +318,20 @@ void GUI::toogle_listening() {
 
                     // Update depth and altitude
                     if (data.at(0) == "$DEPTH") {
-
-                        depth_plot_->addDepthData(std::stod(data.at(1)));
+                        
+                        std::string depth_str = data.at(1);
+                        std::replace(depth_str.begin(), depth_str.end(), '.', ',');
+                        double depth_data = std::stod(depth_str);
+                        depth_plot_->addDepthData(depth_data);
                         if (std::stod(data.at(2)) > 0 ) {
                             depth_plot_->setDepthHold(std::stod(data.at(2)));
                         } else {
                             depth_plot_->clearDepthHold();
                         }
-                        depth_plot_->addAltitudeData(std::stod(data.at(3)));
+                        std::string test_str = data.at(3);
+                        std::replace(test_str.begin(), test_str.end(), '.', ',');
+                        float data_at = std::stod(test_str);
+                        depth_plot_->addAltitudeData(data_at);
                         if (std::stod(data.at(4)) > 0 ) {
                             depth_plot_->setAltitudeHold(std::stod(data.at(4)));
                         } else {

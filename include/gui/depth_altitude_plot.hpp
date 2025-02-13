@@ -102,6 +102,7 @@ public:
         double currentTime = getCurrentTimeInSeconds();
 
         // Add altitude data
+        std::cout << "Altitude data: " << altitude << std::endl;
         altitudeValues.push_back(altitude);
         altitudeTimestamps.push_back(currentTime);
 
@@ -156,7 +157,8 @@ private slots:
             double minDepth = *std::min_element(depthValues.begin(), depthValues.end());
             double maxDepth = *std::max_element(depthValues.begin(), depthValues.end());
             double depthPadding = (maxDepth - minDepth) * 0.1; // 10% padding
-            if (depthPadding == 0) depthPadding = 1.0; // Ensure non-zero padding for constant values
+            //if (depthPadding == 0) depthPadding = 1.0; // Ensure non-zero padding for constant values
+            if (depthPadding < 2.0) depthPadding = 1.0;
             plot->yAxis->setRange(maxDepth + depthPadding, minDepth - depthPadding);
         }
 
@@ -178,7 +180,8 @@ private slots:
             double minAltitude = *std::min_element(altitudeValues.begin(), altitudeValues.end());
             double maxAltitude = *std::max_element(altitudeValues.begin(), altitudeValues.end());
             double altitudePadding = (maxAltitude - minAltitude) * 0.1; // 10% padding
-            if (altitudePadding == 0) altitudePadding = 1.0; // Ensure non-zero padding for constant values
+            //if (altitudePadding == 0) altitudePadding = 1.0; // Ensure non-zero padding for constant values
+            if (altitudePadding < 2.0) altitudePadding = 1.0; // Ensure non-zero padding for constant values
             plot->axisRect()->axis(QCPAxis::atRight)->setRange(minAltitude - altitudePadding, maxAltitude + altitudePadding);
         }
 
