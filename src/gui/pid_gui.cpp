@@ -26,7 +26,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     surge_kp_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_kp_label_->setAlignment(Qt::AlignCenter);
     surge_kp_input_ = new QLineEdit(this);
-    surge_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //surge_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     surge_kp_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_kp_input_->setAlignment(Qt::AlignCenter);
 
@@ -34,7 +34,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     surge_ki_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_ki_label_->setAlignment(Qt::AlignCenter);
     surge_ki_input_ = new QLineEdit(this);
-    surge_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //surge_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     surge_ki_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_ki_input_->setAlignment(Qt::AlignCenter);
 
@@ -42,7 +42,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     surge_kd_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_kd_label_->setAlignment(Qt::AlignCenter);
     surge_kd_input_ = new QLineEdit(this);
-    surge_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));   
+    //surge_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));   
     surge_kd_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_kd_input_->setAlignment(Qt::AlignCenter);
 
@@ -71,7 +71,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     sway_kp_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_kp_label_->setAlignment(Qt::AlignCenter);
     sway_kp_input_ = new QLineEdit(this);
-    sway_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //sway_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     sway_kp_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_kp_input_->setAlignment(Qt::AlignCenter);
 
@@ -79,7 +79,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     sway_ki_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_ki_label_->setAlignment(Qt::AlignCenter);
     sway_ki_input_ = new QLineEdit(this);
-    sway_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //sway_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     sway_ki_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_ki_input_->setAlignment(Qt::AlignCenter);
 
@@ -87,7 +87,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     sway_kd_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_kd_label_->setAlignment(Qt::AlignCenter);
     sway_kd_input_ = new QLineEdit(this);
-    sway_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //sway_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     sway_kd_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_kd_input_->setAlignment(Qt::AlignCenter);
 
@@ -117,7 +117,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     heave_kp_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_kp_label_->setAlignment(Qt::AlignCenter);
     heave_kp_input_ = new QLineEdit(this);
-    heave_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //heave_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     heave_kp_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_kp_input_->setAlignment(Qt::AlignCenter);
 
@@ -125,7 +125,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     heave_ki_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_ki_label_->setAlignment(Qt::AlignCenter);
     heave_ki_input_ = new QLineEdit(this);
-    heave_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //heave_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     heave_ki_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_ki_input_->setAlignment(Qt::AlignCenter);
 
@@ -133,7 +133,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     heave_kd_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_kd_label_->setAlignment(Qt::AlignCenter);
     heave_kd_input_ = new QLineEdit(this);
-    heave_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //heave_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     heave_kd_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_kd_input_->setAlignment(Qt::AlignCenter);
 
@@ -161,7 +161,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     yaw_kp_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_kp_label_->setAlignment(Qt::AlignCenter);
     yaw_kp_input_ = new QLineEdit(this);
-    yaw_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //yaw_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     yaw_kp_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_kp_input_->setAlignment(Qt::AlignCenter);
 
@@ -169,7 +169,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     yaw_ki_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_ki_label_->setAlignment(Qt::AlignCenter);
     yaw_ki_input_ = new QLineEdit(this);
-    yaw_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //yaw_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     yaw_ki_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_ki_input_->setAlignment(Qt::AlignCenter);
 
@@ -177,7 +177,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     yaw_kd_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_kd_label_->setAlignment(Qt::AlignCenter);
     yaw_kd_input_ = new QLineEdit(this);
-    yaw_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //yaw_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     yaw_kd_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_kd_input_->setAlignment(Qt::AlignCenter);
 
@@ -227,7 +227,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     surge_move_label->setStyleSheet("font-weight: bold; font-size: 16px;");
     surge_move_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_move_ = new QLineEdit(this);
-    surge_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
+    //surge_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
     surge_move_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_move_layout->addWidget(surge_move_label, 0, Qt::AlignCenter);
     surge_move_layout->addWidget(surge_move_, 0, Qt::AlignCenter);
@@ -238,7 +238,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     sway_move_label->setStyleSheet("font-weight: bold; font-size: 16px;");
     sway_move_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_move_ = new QLineEdit(this);
-    sway_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
+    //sway_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
     sway_move_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_move_layout->addWidget(sway_move_label, 0, Qt::AlignCenter);
     sway_move_layout->addWidget(sway_move_, 0, Qt::AlignCenter);
@@ -249,7 +249,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     heave_move_label->setStyleSheet("font-weight: bold; font-size: 16px;");
     heave_move_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_move_ = new QLineEdit(this);
-    heave_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
+    //heave_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
     heave_move_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_move_layout->addWidget(heave_move_label, 0, Qt::AlignCenter);
     heave_move_layout->addWidget(heave_move_, 0, Qt::AlignCenter);
@@ -260,9 +260,9 @@ PID_GUI::PID_GUI(QWidget *parent)
     yaw_move_label->setStyleSheet("font-weight: bold; font-size: 16px;");
     yaw_move_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_move_ = new QLineEdit(this);
-    yaw_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
+    //yaw_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
     yaw_move_ = new QLineEdit(this);
-    yaw_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
+    //yaw_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
     yaw_move_layout->addWidget(yaw_move_label, 0, Qt::AlignCenter);
     yaw_move_layout->addWidget(yaw_move_, 0, Qt::AlignCenter);
 
