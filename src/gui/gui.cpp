@@ -6,6 +6,9 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     setFixedSize(1920, 1080);
     setStyleSheet("background-color: white");
 
+    // Socket
+    udp_socket_ = new QUdpSocket(this);
+
     // main layout
     QVBoxLayout *main_layout = new QVBoxLayout(this);
     this->setLayout(main_layout);
@@ -252,7 +255,19 @@ void GUI::on_stop_button() {
         stop_button_->setStyleSheet("background-color: darkred; color: black; font-size: 20px;");
         stop_button_->setCheckable(true);
         write_to_terminal(QString("Emergency Stop Initiated"));
+        QString msg = "$STOP,";
+        send_udp_msg(msg);
     }
+
+}
+
+// UDP Parser
+void GUI::send_udp_msg(const QString &msg) {
+
+    // Send UDP message
+    QHostAddress target_address = QHostAddress("127.0.0.1");
+    quint16 target_port = 9100;
+    udp_socket_->writeDatagram(msg.toUtf8(), target_address, target_port);
 
 }
 

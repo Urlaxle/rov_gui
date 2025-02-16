@@ -113,6 +113,14 @@ PID_GUI::PID_GUI(QWidget *parent)
     heave_label_->setStyleSheet("font-weight: bold; font-size: 16px;");
     heave_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
+    heave_downforce_label_ = new QLabel("Downforce", this);
+    heave_downforce_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    heave_downforce_label_->setAlignment(Qt::AlignCenter);
+    heave_downforce_input_ = new QLineEdit(this);
+    //heave_downforce_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    heave_downforce_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    heave_downforce_input_->setAlignment(Qt::AlignCenter);
+
     heave_kp_label_ = new QLabel("KP", this);
     heave_kp_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_kp_label_->setAlignment(Qt::AlignCenter);
@@ -142,6 +150,8 @@ PID_GUI::PID_GUI(QWidget *parent)
     heave_layout->addWidget(heave_label_);
     QHBoxLayout* heave_gains_layout = new QHBoxLayout;
     QHBoxLayout* heave_label_layout = new QHBoxLayout;
+    heave_label_layout->addWidget(heave_downforce_label_);
+    heave_gains_layout->addWidget(heave_downforce_input_);
     heave_label_layout->addWidget(heave_kp_label_);
     heave_gains_layout->addWidget(heave_kp_input_);
     heave_label_layout->addWidget(heave_ki_label_);
@@ -339,7 +349,7 @@ PID_GUI::~PID_GUI() {
 }
 
 void PID_GUI::send_button_pressed() {
-    QString msg = "$PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text();
+    QString msg = "$PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text() + "," + heave_downforce_input_->text();
     send_udp_msg(msg);
 }
 
@@ -361,6 +371,7 @@ void PID_GUI::default_button_pressed() {
     sway_kp_input_->setText("0.2");
     sway_ki_input_->setText("0.05");
     sway_kd_input_->setText("0.05");
+    heave_downforce_input_->setText("0.0");
     heave_kp_input_->setText("0.25");
     heave_ki_input_->setText("0.05");
     heave_kd_input_->setText("0.05");
@@ -499,6 +510,7 @@ void PID_GUI::enable_advanced_settings(bool enable) {
     heave_kp_input_->setEnabled(enable);
     heave_ki_input_->setEnabled(enable);
     heave_kd_input_->setEnabled(enable);
+    heave_downforce_input_->setEnabled(enable);
     yaw_kp_input_->setEnabled(enable);
     yaw_ki_input_->setEnabled(enable);
     yaw_kd_input_->setEnabled(enable);
@@ -516,6 +528,7 @@ void PID_GUI::enable_advanced_settings(bool enable) {
         sway_ki_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: gray;");
         sway_kd_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: gray;");
         heave_label_->setStyleSheet("font-weight: bold; font-size: 16px; color: gray;");
+        heave_downforce_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: gray;");
         heave_kp_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: gray;");
         heave_ki_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: gray;");
         heave_kd_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: gray;");
@@ -534,6 +547,7 @@ void PID_GUI::enable_advanced_settings(bool enable) {
         sway_ki_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: black;");
         sway_kd_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: black;");
         heave_label_->setStyleSheet("font-weight: bold; font-size: 16px; color: black;");
+        heave_downforce_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: black;");
         heave_kp_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: black;");
         heave_ki_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: black;");
         heave_kd_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: black;");
@@ -577,6 +591,7 @@ void PID_GUI::set_default_gains() {
     heave_kp_input_->setText(QString::number(heave_kp_));
     heave_ki_input_->setText(QString::number(heave_ki_));
     heave_kd_input_->setText(QString::number(heave_kd_));
+    heave_downforce_input_->setText(QString::number(heave_downforce_));
     yaw_kp_input_->setText(QString::number(yaw_kp_));
     yaw_ki_input_->setText(QString::number(yaw_ki_));
     yaw_kd_input_->setText(QString::number(yaw_kd_));

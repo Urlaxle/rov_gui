@@ -57,6 +57,7 @@ public:
 private:
     void update_config(const QString &ip, int port1, int port2, int port3);
     void write_to_terminal(const QString &msg);
+    void send_udp_msg(const QString &msg);
 
 private slots:
     // Buttons presses
@@ -94,6 +95,7 @@ private:
 
     // Communication parameters
     QUdpSocket* control_socket_;
+    QUdpSocket* udp_socket_;
     quint16 control_port_ = 9101;
     bool control_is_listening_ = false;
 

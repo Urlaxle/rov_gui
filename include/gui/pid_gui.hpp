@@ -94,6 +94,7 @@ class PID_GUI : public QWidget {
         QLineEdit* heave_kp_input_;
         QLineEdit* heave_ki_input_;
         QLineEdit* heave_kd_input_;
+        QLineEdit* heave_downforce_input_;
         QLineEdit* yaw_kp_input_;
         QLineEdit* yaw_ki_input_;
         QLineEdit* yaw_kd_input_;
