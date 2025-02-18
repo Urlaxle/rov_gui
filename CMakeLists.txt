@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(crazyflie_ros2)
+project(rov_gui)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -25,7 +25,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${QCUSTOMPLOT_INCLUDE_DIR})
 
 # Add the executable
-add_executable(CrazyFlieGUI
+add_executable(rov_gui
     src/gui/gui_test.cpp
     src/gui/gui.cpp
     src/gui/configuration_gui.cpp
@@ -54,7 +54,7 @@ add_executable(CrazyFlieGUI
 )
 
 # Link against Qt5 libraries
-target_link_libraries(CrazyFlieGUI Qt5::Widgets Qt5::Network ${QCUSTOMPLOT_LIBRARY})
+target_link_libraries(rov_gui Qt5::Widgets Qt5::Network ${QCUSTOMPLOT_LIBRARY})
 
 # Ensure MOC files are generated correctly
-target_include_directories(CrazyFlieGUI PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(rov_gui PRIVATE ${CMAKE_CURRENT_BINARY_DIR})

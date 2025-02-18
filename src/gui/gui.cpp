@@ -2,9 +2,12 @@
 
 GUI::GUI(QWidget *parent) : QWidget(parent) {
 
-    setWindowTitle("MINERVA II CONTROL SYSTEM");
+    setWindowTitle("BLUEYE CONTROL SYSTEM");
     setFixedSize(1920, 1080);
     setStyleSheet("background-color: white");
+
+    // Socket
+    udp_socket_ = new QUdpSocket(this);
 
     // main layout
     QVBoxLayout *main_layout = new QVBoxLayout(this);
@@ -36,12 +39,13 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     // Compass widget
     compass_widget_ = new compass;
     compass_widget_->setFixedSize(500, 500);
+    compass_widget_->set_heading(90.0, 0);
 
     // Thruster Widget
     thrusters_widget_ = new thrusters(this);
 
     // Title widget
-    QLabel *title = new QLabel("Minerva II Control System", this);
+    QLabel *title = new QLabel("Blueye Control System", this);
     title->setAlignment(Qt::AlignCenter);
     title->setStyleSheet("font-weight: bold; font-size: 20px;");
 
@@ -122,7 +126,7 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     terminal_ = new QTextEdit(this);
     terminal_->setReadOnly(true); // Make it read-only
     terminal_->setStyleSheet("background-color: black; color: white; font-family: monospace; border: 5px solid gray; border-radius: 5px;");
-    write_to_terminal(QString("Welcome to the MINERVA II Control System"));
+    write_to_terminal(QString("Welcome to the Blueye Control System"));
     tab5_layout->addWidget(terminal_);
     tab5->setLayout(tab5_layout);
 
@@ -137,8 +141,8 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
 
     // Add tabs
     tab_widget->addTab(tab1, "Control System");
-    tab_widget->addTab(tab2, "Waypoint Controller");
-    tab_widget->addTab(tab3, "DP Controller");
+    //tab_widget->addTab(tab2, "Waypoint Controller");
+    //tab_widget->addTab(tab3, "DP Controller");
     tab_widget->addTab(tab4, "Parameter Tuning");
     tab_widget->addTab(tab5, "System Log");
     tab_widget->addTab(tab6, "Altitude Tuning");
@@ -146,6 +150,8 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
 
     // Setup socket
     control_socket_ = new QUdpSocket(this);
+
+    // Set initial heading north
 
     // Show widgets
     this->show();
@@ -249,7 +255,19 @@ void GUI::on_stop_button() {
         stop_button_->setStyleSheet("background-color: darkred; color: black; font-size: 20px;");
         stop_button_->setCheckable(true);
         write_to_terminal(QString("Emergency Stop Initiated"));
+        QString msg = "$STOP,";
+        send_udp_msg(msg);
     }
+
+}
+
+// UDP Parser
+void GUI::send_udp_msg(const QString &msg) {
+
+    // Send UDP message
+    QHostAddress target_address = QHostAddress("127.0.0.1");
+    quint16 target_port = 9100;
+    udp_socket_->writeDatagram(msg.toUtf8(), target_address, target_port);
 
 }
 
@@ -310,18 +328,25 @@ void GUI::toogle_listening() {
 
                     // Update Compass Rose
                     if (data.at(0) == "$COMPASS") {
-                        compass_widget_->set_heading(std::stod(data.at(1)), std::stod(data.at(2)));
+                        compass_widget_->set_heading(std::stod(data.at(1)) + 90.0, std::stod(data.at(2)));
                     }
 
                     // Update depth and altitude
                     if (data.at(0) == "$DEPTH") {
-                        depth_plot_->addDepthData(std::stod(data.at(1)));
+                        
+                        std::string depth_str = data.at(1);
+                        std::replace(depth_str.begin(), depth_str.end(), '.', ',');
+                        double depth_data = std::stod(depth_str);
+                        depth_plot_->addDepthData(depth_data);
                         if (std::stod(data.at(2)) > 0 ) {
                             depth_plot_->setDepthHold(std::stod(data.at(2)));
                         } else {
                             depth_plot_->clearDepthHold();
                         }
-                        depth_plot_->addAltitudeData(std::stod(data.at(3)));
+                        std::string test_str = data.at(3);
+                        std::replace(test_str.begin(), test_str.end(), '.', ',');
+                        float data_at = std::stod(test_str);
+                        depth_plot_->addAltitudeData(data_at);
                         if (std::stod(data.at(4)) > 0 ) {
                             depth_plot_->setAltitudeHold(std::stod(data.at(4)));
                         } else {

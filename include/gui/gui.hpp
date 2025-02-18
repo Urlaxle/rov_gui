@@ -57,6 +57,7 @@ public:
 private:
     void update_config(const QString &ip, int port1, int port2, int port3);
     void write_to_terminal(const QString &msg);
+    void send_udp_msg(const QString &msg);
 
 private slots:
     // Buttons presses
@@ -72,7 +73,7 @@ private slots:
 private:
 
     // IP address and port of the control PC
-    QString ip_address_ = "172.16.1.70";
+    QString ip_address_ = "127.0.0.1";
     int control_system_port_ = 8570;
     int system_status_port_ = 8670;
     int mission_status_port_ = 8671;
@@ -94,7 +95,8 @@ private:
 
     // Communication parameters
     QUdpSocket* control_socket_;
-    quint16 control_port_ = 8571;
+    QUdpSocket* udp_socket_;
+    quint16 control_port_ = 9101;
     bool control_is_listening_ = false;
 
 

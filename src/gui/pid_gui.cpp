@@ -12,6 +12,8 @@ PID_GUI::PID_GUI(QWidget *parent)
 
     // PARAMETER GAINS //////////////////////////////////////////////////////////////
 
+    udp_socket_ = new QUdpSocket(this);
+
     QVBoxLayout* gains_layout = new QVBoxLayout;
 
     // Surge gains
@@ -24,7 +26,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     surge_kp_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_kp_label_->setAlignment(Qt::AlignCenter);
     surge_kp_input_ = new QLineEdit(this);
-    surge_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //surge_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     surge_kp_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_kp_input_->setAlignment(Qt::AlignCenter);
 
@@ -32,7 +34,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     surge_ki_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_ki_label_->setAlignment(Qt::AlignCenter);
     surge_ki_input_ = new QLineEdit(this);
-    surge_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //surge_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     surge_ki_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_ki_input_->setAlignment(Qt::AlignCenter);
 
@@ -40,7 +42,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     surge_kd_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_kd_label_->setAlignment(Qt::AlignCenter);
     surge_kd_input_ = new QLineEdit(this);
-    surge_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));   
+    //surge_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));   
     surge_kd_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_kd_input_->setAlignment(Qt::AlignCenter);
 
@@ -69,7 +71,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     sway_kp_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_kp_label_->setAlignment(Qt::AlignCenter);
     sway_kp_input_ = new QLineEdit(this);
-    sway_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //sway_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     sway_kp_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_kp_input_->setAlignment(Qt::AlignCenter);
 
@@ -77,7 +79,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     sway_ki_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_ki_label_->setAlignment(Qt::AlignCenter);
     sway_ki_input_ = new QLineEdit(this);
-    sway_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //sway_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     sway_ki_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_ki_input_->setAlignment(Qt::AlignCenter);
 
@@ -85,7 +87,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     sway_kd_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_kd_label_->setAlignment(Qt::AlignCenter);
     sway_kd_input_ = new QLineEdit(this);
-    sway_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //sway_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     sway_kd_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_kd_input_->setAlignment(Qt::AlignCenter);
 
@@ -111,11 +113,19 @@ PID_GUI::PID_GUI(QWidget *parent)
     heave_label_->setStyleSheet("font-weight: bold; font-size: 16px;");
     heave_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
+    heave_downforce_label_ = new QLabel("Downforce", this);
+    heave_downforce_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    heave_downforce_label_->setAlignment(Qt::AlignCenter);
+    heave_downforce_input_ = new QLineEdit(this);
+    //heave_downforce_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    heave_downforce_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    heave_downforce_input_->setAlignment(Qt::AlignCenter);
+
     heave_kp_label_ = new QLabel("KP", this);
     heave_kp_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_kp_label_->setAlignment(Qt::AlignCenter);
     heave_kp_input_ = new QLineEdit(this);
-    heave_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //heave_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     heave_kp_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_kp_input_->setAlignment(Qt::AlignCenter);
 
@@ -123,7 +133,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     heave_ki_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_ki_label_->setAlignment(Qt::AlignCenter);
     heave_ki_input_ = new QLineEdit(this);
-    heave_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //heave_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     heave_ki_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_ki_input_->setAlignment(Qt::AlignCenter);
 
@@ -131,7 +141,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     heave_kd_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_kd_label_->setAlignment(Qt::AlignCenter);
     heave_kd_input_ = new QLineEdit(this);
-    heave_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //heave_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     heave_kd_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_kd_input_->setAlignment(Qt::AlignCenter);
 
@@ -140,6 +150,8 @@ PID_GUI::PID_GUI(QWidget *parent)
     heave_layout->addWidget(heave_label_);
     QHBoxLayout* heave_gains_layout = new QHBoxLayout;
     QHBoxLayout* heave_label_layout = new QHBoxLayout;
+    heave_label_layout->addWidget(heave_downforce_label_);
+    heave_gains_layout->addWidget(heave_downforce_input_);
     heave_label_layout->addWidget(heave_kp_label_);
     heave_gains_layout->addWidget(heave_kp_input_);
     heave_label_layout->addWidget(heave_ki_label_);
@@ -159,7 +171,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     yaw_kp_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_kp_label_->setAlignment(Qt::AlignCenter);
     yaw_kp_input_ = new QLineEdit(this);
-    yaw_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //yaw_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     yaw_kp_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_kp_input_->setAlignment(Qt::AlignCenter);
 
@@ -167,7 +179,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     yaw_ki_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_ki_label_->setAlignment(Qt::AlignCenter);
     yaw_ki_input_ = new QLineEdit(this);
-    yaw_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //yaw_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     yaw_ki_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_ki_input_->setAlignment(Qt::AlignCenter);
 
@@ -175,7 +187,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     yaw_kd_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_kd_label_->setAlignment(Qt::AlignCenter);
     yaw_kd_input_ = new QLineEdit(this);
-    yaw_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //yaw_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     yaw_kd_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_kd_input_->setAlignment(Qt::AlignCenter);
 
@@ -225,7 +237,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     surge_move_label->setStyleSheet("font-weight: bold; font-size: 16px;");
     surge_move_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_move_ = new QLineEdit(this);
-    surge_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
+    //surge_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
     surge_move_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     surge_move_layout->addWidget(surge_move_label, 0, Qt::AlignCenter);
     surge_move_layout->addWidget(surge_move_, 0, Qt::AlignCenter);
@@ -236,7 +248,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     sway_move_label->setStyleSheet("font-weight: bold; font-size: 16px;");
     sway_move_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_move_ = new QLineEdit(this);
-    sway_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
+    //sway_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
     sway_move_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     sway_move_layout->addWidget(sway_move_label, 0, Qt::AlignCenter);
     sway_move_layout->addWidget(sway_move_, 0, Qt::AlignCenter);
@@ -247,7 +259,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     heave_move_label->setStyleSheet("font-weight: bold; font-size: 16px;");
     heave_move_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_move_ = new QLineEdit(this);
-    heave_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
+    //heave_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
     heave_move_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_move_layout->addWidget(heave_move_label, 0, Qt::AlignCenter);
     heave_move_layout->addWidget(heave_move_, 0, Qt::AlignCenter);
@@ -258,9 +270,9 @@ PID_GUI::PID_GUI(QWidget *parent)
     yaw_move_label->setStyleSheet("font-weight: bold; font-size: 16px;");
     yaw_move_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     yaw_move_ = new QLineEdit(this);
-    yaw_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
+    //yaw_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
     yaw_move_ = new QLineEdit(this);
-    yaw_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
+    //yaw_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
     yaw_move_layout->addWidget(yaw_move_label, 0, Qt::AlignCenter);
     yaw_move_layout->addWidget(yaw_move_, 0, Qt::AlignCenter);
 
@@ -337,15 +349,40 @@ PID_GUI::~PID_GUI() {
 }
 
 void PID_GUI::send_button_pressed() {
-    std::cout << "Send Button Is Pressed!" << std::endl;
+    QString msg = "$PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text() + "," + heave_downforce_input_->text();
+    send_udp_msg(msg);
+}
+
+void PID_GUI::send_udp_msg(const QString &msg) {
+
+    // Send UDP message
+    QHostAddress target_address = QHostAddress("127.0.0.1");
+    quint16 target_port = 9100;
+    udp_socket_->writeDatagram(msg.toUtf8(), target_address, target_port);
+
 }
 
 void PID_GUI::default_button_pressed() {
-    std::cout << "Default Button Is Pressed!" << std::endl;
+
+    // Medium gains are default atm
+    surge_kp_input_->setText("0.2"); 
+    surge_ki_input_->setText("0.05");
+    surge_kd_input_->setText("0.05");
+    sway_kp_input_->setText("0.2");
+    sway_ki_input_->setText("0.05");
+    sway_kd_input_->setText("0.05");
+    heave_downforce_input_->setText("0.0");
+    heave_kp_input_->setText("0.25");
+    heave_ki_input_->setText("0.05");
+    heave_kd_input_->setText("0.05");
+    yaw_kp_input_->setText("0.15");
+    yaw_ki_input_->setText("0.05");
+    yaw_kd_input_->setText("0.05");
 }
 
 void PID_GUI::send_command_button_pressed() {
-    std::cout << "Send Command Button Is Pressed!" << std::endl;
+    QString msg = "$MOVE," + surge_move_->text() + "," + sway_move_->text() + "," + heave_move_->text() + "," + yaw_move_->text();
+    send_udp_msg(msg);
 }
 
 void PID_GUI::low_gains_button_pressed() {
@@ -353,6 +390,27 @@ void PID_GUI::low_gains_button_pressed() {
     if (low_gains_button_->isChecked()) {
         medium_gains_button_->setChecked(false);
         high_gains_button_->setChecked(false);
+
+        // Change predefined gains accordingly
+        surge_kp_input_->setText("0.2"); 
+        surge_ki_input_->setText("0.05");
+        surge_kd_input_->setText("0.05");
+        sway_kp_input_->setText("0.2");
+        sway_ki_input_->setText("0.05");
+        sway_kd_input_->setText("0.05");
+        heave_kp_input_->setText("0.25");
+        heave_ki_input_->setText("0.05");
+        heave_kd_input_->setText("0.05");
+        yaw_kp_input_->setText("0.15");
+        yaw_ki_input_->setText("0.05");
+        yaw_kd_input_->setText("0.05");
+        surge_move_->setText("0.0");
+        sway_move_->setText("0.0");
+        heave_move_->setText("0.0");
+        yaw_move_->setText("0.0");
+
+        QString msg = "$PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text();
+        send_udp_msg(msg);
 
         // Change predefined gains accordingly
     } else {
@@ -368,6 +426,26 @@ void PID_GUI::medium_gains_button_pressed() {
         high_gains_button_->setChecked(false);
 
         // Change predefined gains accordingly
+        surge_kp_input_->setText("0.4"); 
+        surge_ki_input_->setText("0.1");
+        surge_kd_input_->setText("0.15");
+        sway_kp_input_->setText("0.4");
+        sway_ki_input_->setText("0.1");
+        sway_kd_input_->setText("0.15");
+        heave_kp_input_->setText("0.3");
+        heave_ki_input_->setText("0.1");
+        heave_kd_input_->setText("0.1");
+        yaw_kp_input_->setText("0.3");
+        yaw_ki_input_->setText("0.1");
+        yaw_kd_input_->setText("0.2");
+        surge_move_->setText("0.0");
+        sway_move_->setText("0.0");
+        heave_move_->setText("0.0");
+        yaw_move_->setText("0.0");
+
+        QString msg = "$PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text();
+        send_udp_msg(msg);
+
     } else {
         // Medium gains already in effect, no need to do anything
         medium_gains_button_->setChecked(true);
@@ -381,6 +459,26 @@ void PID_GUI::high_gains_button_pressed() {
         medium_gains_button_->setChecked(false);
 
         // Change predefined gains accordingly
+        surge_kp_input_->setText("0.6"); 
+        surge_ki_input_->setText("0.2");
+        surge_kd_input_->setText("0.3");
+        sway_kp_input_->setText("0.6");
+        sway_ki_input_->setText("0.2");
+        sway_kd_input_->setText("0.3");
+        heave_kp_input_->setText("0.7");
+        heave_ki_input_->setText("0.3");
+        heave_kd_input_->setText("0.2");
+        yaw_kp_input_->setText("0.6");
+        yaw_ki_input_->setText("0.15");
+        yaw_kd_input_->setText("0.25");
+        surge_move_->setText("0.0");
+        sway_move_->setText("0.0");
+        heave_move_->setText("0.0");
+        yaw_move_->setText("0.0");
+
+        QString msg = "$PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text();
+        send_udp_msg(msg);
+
     } else {
         // High gains already in effect, no need to do anything
         high_gains_button_->setChecked(true);
@@ -412,6 +510,7 @@ void PID_GUI::enable_advanced_settings(bool enable) {
     heave_kp_input_->setEnabled(enable);
     heave_ki_input_->setEnabled(enable);
     heave_kd_input_->setEnabled(enable);
+    heave_downforce_input_->setEnabled(enable);
     yaw_kp_input_->setEnabled(enable);
     yaw_ki_input_->setEnabled(enable);
     yaw_kd_input_->setEnabled(enable);
@@ -429,6 +528,7 @@ void PID_GUI::enable_advanced_settings(bool enable) {
         sway_ki_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: gray;");
         sway_kd_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: gray;");
         heave_label_->setStyleSheet("font-weight: bold; font-size: 16px; color: gray;");
+        heave_downforce_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: gray;");
         heave_kp_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: gray;");
         heave_ki_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: gray;");
         heave_kd_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: gray;");
@@ -447,6 +547,7 @@ void PID_GUI::enable_advanced_settings(bool enable) {
         sway_ki_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: black;");
         sway_kd_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: black;");
         heave_label_->setStyleSheet("font-weight: bold; font-size: 16px; color: black;");
+        heave_downforce_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: black;");
         heave_kp_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: black;");
         heave_ki_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: black;");
         heave_kd_label_->setStyleSheet("font-weight: bold; font-size: 12px; color: black;");
@@ -462,24 +563,24 @@ void PID_GUI::set_default_gains() {
 
     // Set default gains
     surge_downforce_ = 0.0;
-    surge_kp_ = 10.0;
-    surge_ki_ = 0.0;
-    surge_kd_ = 2.0;
+    surge_kp_ = 0.4;
+    surge_ki_ = 0.2;
+    surge_kd_ = 0.2;
 
     sway_downforce_ = 0.0;
-    sway_kp_ = 10.0;
-    sway_ki_ = 0.0;
-    sway_kd_ = 2.0;
+    sway_kp_ = 0.4;
+    sway_ki_ = 0.2;
+    sway_kd_ = 0.2;
 
     heave_downforce_ = 0.0;
-    heave_kp_ = 10.0;
-    heave_ki_ = 0.0;
-    heave_kd_ = 2.0;
+    heave_kp_ = 0.4;
+    heave_ki_ = 0.2;
+    heave_kd_ = 0.2;
 
     yaw_downforce_ = 0.0;
-    yaw_kp_ = 10.0;
-    yaw_ki_ = 0.0;
-    yaw_kd_ = 2.0;
+    yaw_kp_ = 0.4;
+    yaw_ki_ = 0.2;
+    yaw_kd_ = 0.2;
 
     surge_kp_input_->setText(QString::number(surge_kp_));
     surge_ki_input_->setText(QString::number(surge_ki_));
@@ -490,10 +591,15 @@ void PID_GUI::set_default_gains() {
     heave_kp_input_->setText(QString::number(heave_kp_));
     heave_ki_input_->setText(QString::number(heave_ki_));
     heave_kd_input_->setText(QString::number(heave_kd_));
+    heave_downforce_input_->setText(QString::number(heave_downforce_));
     yaw_kp_input_->setText(QString::number(yaw_kp_));
     yaw_ki_input_->setText(QString::number(yaw_ki_));
     yaw_kd_input_->setText(QString::number(yaw_kd_));
 
+    surge_move_->setText("0.0");
+    sway_move_->setText("0.0");
+    heave_move_->setText("0.0");
+    yaw_move_->setText("0.0");
 
     // Set default values to the GUI
     enable_advanced_settings(false);
