@@ -126,7 +126,7 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     terminal_ = new QTextEdit(this);
     terminal_->setReadOnly(true); // Make it read-only
     terminal_->setStyleSheet("background-color: black; color: white; font-family: monospace; border: 5px solid gray; border-radius: 5px;");
-    write_to_terminal(QString("Welcome to the MINERVA II Control System"));
+    write_to_terminal(QString("Welcome to the Blueye Control System"));
     tab5_layout->addWidget(terminal_);
     tab5->setLayout(tab5_layout);
 
