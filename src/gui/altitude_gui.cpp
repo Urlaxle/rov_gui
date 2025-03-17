@@ -7,8 +7,8 @@ AltitudeTuning::AltitudeTuning(QWidget *parent) : QWidget(parent) {
     udp_socket_ = new QUdpSocket(this);
 
     udp_socket_receive_ = new QUdpSocket(this);
-    //udp_socket_receive_->bind(QHostAddress::LocalHost, 9101);
-    udp_socket_receive_->bind(QHostAddress("172.16.1.75"), 9101);
+    udp_socket_receive_->bind(QHostAddress::LocalHost, 9101);
+    //udp_socket_receive_->bind(QHostAddress("172.16.1.75"), 9101);
     connect(udp_socket_receive_, &QUdpSocket::readyRead, this, &AltitudeTuning::incoming_messages);
 
     ///////////////////////////////////// LEFT LAYOUT /////////////////////////////////////
@@ -48,7 +48,7 @@ AltitudeTuning::AltitudeTuning(QWidget *parent) : QWidget(parent) {
     altitude_setpoint_->setFixedSize(120, 60);
     altitude_setpoint_->setStyleSheet("font-size: 30px;");
     altitude_setpoint_->setAlignment(Qt::AlignCenter);
-    altitude_setpoint_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //altitude_setpoint_->setValidator(new QDoubleValidator(0, 100, 2, this));
     altitude_setpoint_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     altitude_setpoint_->setAlignment(Qt::AlignCenter);
     setpoint_layout->addWidget(setpoint_label, 1, Qt::AlignCenter);
@@ -108,22 +108,22 @@ AltitudeTuning::AltitudeTuning(QWidget *parent) : QWidget(parent) {
 
     altitude_kp_input_ = new QLineEdit(this); 
     altitude_kp_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    altitude_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //altitude_kp_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     altitude_kp_input_->setAlignment(Qt::AlignCenter);
     altitude_kp_input_->setStyleSheet("font-size: 20px;");
     altitude_ki_input_ = new QLineEdit(this);
     altitude_ki_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    altitude_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //altitude_ki_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     altitude_ki_input_->setAlignment(Qt::AlignCenter);
     altitude_ki_input_->setStyleSheet("font-size: 20px;");
     altitude_kd_input_ = new QLineEdit(this);
     altitude_kd_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    altitude_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //altitude_kd_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     altitude_kd_input_->setAlignment(Qt::AlignCenter);
     altitude_kd_input_->setStyleSheet("font-size: 20px;");
     constant_downforce_input_ = new QLineEdit(this);
     constant_downforce_input_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    constant_downforce_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
+    //constant_downforce_input_->setValidator(new QDoubleValidator(0, 100, 2, this));
     constant_downforce_input_->setAlignment(Qt::AlignCenter);
     constant_downforce_input_->setStyleSheet("font-size: 20px;");
 
