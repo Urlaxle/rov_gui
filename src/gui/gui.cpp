@@ -2,7 +2,7 @@
 
 GUI::GUI(QWidget *parent) : QWidget(parent) {
 
-    setWindowTitle("BLUEYE CONTROL SYSTEM");
+    setWindowTitle("MINERVA II - CONTROL SYSTEM");
     setFixedSize(1920, 1080);
     setStyleSheet("background-color: white");
 
@@ -45,7 +45,7 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     thrusters_widget_ = new thrusters(this);
 
     // Title widget
-    QLabel *title = new QLabel("Blueye Control System", this);
+    QLabel *title = new QLabel("MINERVA II Control System", this);
     title->setAlignment(Qt::AlignCenter);
     title->setStyleSheet("font-weight: bold; font-size: 20px;");
 
@@ -126,7 +126,7 @@ GUI::GUI(QWidget *parent) : QWidget(parent) {
     terminal_ = new QTextEdit(this);
     terminal_->setReadOnly(true); // Make it read-only
     terminal_->setStyleSheet("background-color: black; color: white; font-family: monospace; border: 5px solid gray; border-radius: 5px;");
-    write_to_terminal(QString("Welcome to the Blueye Control System"));
+    write_to_terminal(QString("Welcome to the Minerva II Control System"));
     tab5_layout->addWidget(terminal_);
     tab5->setLayout(tab5_layout);
 
@@ -300,7 +300,6 @@ void GUI::toogle_listening() {
                         start = end + 1;
                     }
                     data.push_back(message.substr(start));
-
                     // Take action based on arrived message
                     if (data.at(0) == "$STATUS") { // Format $STATUS,DVL,IMU,DEPTH,USBL,WAYPOINT,DYNAMIC,ALTITUDE,DEPTH_HOLD
                         // Update Indicators
@@ -353,7 +352,6 @@ void GUI::toogle_listening() {
                             depth_plot_->clearAltitudeHold();
                         }
                     }
-
                     if (data.at(0) == "$ALTITUDE") {
                         altitude_tuning_widget_->update_altitude(std::stod(data.at(1)));
                     }

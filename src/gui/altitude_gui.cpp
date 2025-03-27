@@ -8,7 +8,7 @@ AltitudeTuning::AltitudeTuning(QWidget *parent) : QWidget(parent) {
 
     udp_socket_receive_ = new QUdpSocket(this);
     //udp_socket_receive_->bind(QHostAddress::LocalHost, 9101);
-    udp_socket_receive_->bind(QHostAddress("172.16.1.75"), 9101);
+    udp_socket_receive_->bind(QHostAddress("127.0.0.1"), 9101);
     connect(udp_socket_receive_, &QUdpSocket::readyRead, this, &AltitudeTuning::incoming_messages);
 
     ///////////////////////////////////// LEFT LAYOUT /////////////////////////////////////

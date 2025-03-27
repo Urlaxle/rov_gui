@@ -96,7 +96,7 @@ private:
     // Communication parameters
     QUdpSocket* control_socket_;
     QUdpSocket* udp_socket_;
-    quint16 control_port_ = 9101;
+    quint16 control_port_ = 9102;
     bool control_is_listening_ = false;
 
 

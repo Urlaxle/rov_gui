@@ -102,7 +102,6 @@ public:
         double currentTime = getCurrentTimeInSeconds();
 
         // Add altitude data
-        std::cout << "Altitude data: " << altitude << std::endl;
         altitudeValues.push_back(altitude);
         altitudeTimestamps.push_back(currentTime);
 

@@ -56,6 +56,7 @@ class PID_GUI : public QWidget {
         void low_gains_button_pressed();
         void medium_gains_button_pressed();
         void high_gains_button_pressed();
+        void dp_hold_button_pressed();
         void advanced_button_pressed();
         void set_default_gains();
         void send_udp_msg(const QString &msg);
@@ -70,6 +71,7 @@ class PID_GUI : public QWidget {
         QPushButton* low_gains_button_;
         QPushButton* medium_gains_button_;
         QPushButton* high_gains_button_;
+        QPushButton* dp_hold_button_;
         QPushButton* advanced_settings_button_;
 
         // Socket

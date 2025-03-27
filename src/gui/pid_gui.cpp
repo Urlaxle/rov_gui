@@ -113,7 +113,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     heave_label_->setStyleSheet("font-weight: bold; font-size: 16px;");
     heave_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-    heave_downforce_label_ = new QLabel("Downforce", this);
+    heave_downforce_label_ = new QLabel("Feedforward", this);
     heave_downforce_label_->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     heave_downforce_label_->setAlignment(Qt::AlignCenter);
     heave_downforce_input_ = new QLineEdit(this);
@@ -269,7 +269,6 @@ PID_GUI::PID_GUI(QWidget *parent)
     yaw_move_label->setAlignment(Qt::AlignCenter);
     yaw_move_label->setStyleSheet("font-weight: bold; font-size: 16px;");
     yaw_move_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    yaw_move_ = new QLineEdit(this);
     //yaw_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
     yaw_move_ = new QLineEdit(this);
     //yaw_move_->setValidator(new QDoubleValidator(-100, 100, 2, this));
@@ -315,6 +314,12 @@ PID_GUI::PID_GUI(QWidget *parent)
     high_gains_button_->setFixedSize(200, 200);
     connect(high_gains_button_, &QPushButton::clicked, this, &PID_GUI::high_gains_button_pressed);
 
+    dp_hold_button_ = new QPushButton("Position\n Hold", this);
+    dp_hold_button_->setCheckable(true);
+    dp_hold_button_->setStyleSheet("font-size: 20px; font-weight: bold;");
+    dp_hold_button_->setFixedSize(200, 200);
+    connect(dp_hold_button_, &QPushButton::clicked, this, &PID_GUI::dp_hold_button_pressed);
+
     advanced_settings_button_ = new QPushButton("Advanced Settings", this);
     advanced_settings_button_->setStyleSheet("font-size: 12px; font-weight: bold;");
     connect(advanced_settings_button_, &QPushButton::clicked, this, &PID_GUI::advanced_button_pressed);
@@ -325,6 +330,7 @@ PID_GUI::PID_GUI(QWidget *parent)
     predefined_gains_button_layout->addWidget(low_gains_button_, 0, Qt::AlignCenter);
     predefined_gains_button_layout->addWidget(medium_gains_button_, 0, Qt::AlignCenter);
     predefined_gains_button_layout->addWidget(high_gains_button_, 0 , Qt::AlignCenter);
+    predefined_gains_button_layout->addWidget(dp_hold_button_, 0, Qt::AlignCenter);
     predefined_gains_button_layout->addWidget(advanced_settings_button_, 0, Qt::AlignCenter);
 
 
@@ -351,6 +357,16 @@ PID_GUI::~PID_GUI() {
 void PID_GUI::send_button_pressed() {
     QString msg = "$PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text() + "," + heave_downforce_input_->text();
     send_udp_msg(msg);
+}
+
+void PID_GUI::dp_hold_button_pressed() {
+    if (dp_hold_button_->isChecked()) {
+        QString msg = "$DP,1";
+        send_udp_msg(msg);
+    } else {
+        QString msg = "$DP,0";
+        send_udp_msg(msg);
+    } 
 }
 
 void PID_GUI::send_udp_msg(const QString &msg) {
@@ -409,7 +425,7 @@ void PID_GUI::low_gains_button_pressed() {
         heave_move_->setText("0.0");
         yaw_move_->setText("0.0");
 
-        QString msg = "$PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text();
+        QString msg = "$PID," + surge_kp_input_->text() + "," + surge_ki_input_->text() + "," + surge_kd_input_->text() + "," + sway_kp_input_->text() + "," + sway_ki_input_->text() + "," + sway_kd_input_->text() + "," + heave_kp_input_->text() + "," + heave_ki_input_->text() + "," + heave_kd_input_->text() + "," + yaw_kp_input_->text() + "," + yaw_ki_input_->text() + "," + yaw_kd_input_->text() + "," + heave_downforce_input_->text();
         send_udp_msg(msg);
 
         // Change predefined gains accordingly
